@@ -1,5 +1,7 @@
 # mongodb_config.py
 import os
+from dotenv import load_dotenv
+load_dotenv()
 from flask_pymongo import PyMongo
 
 MONGO_URI = os.environ.get("MONGODB_URI", "mongodb://localhost:27017/fraud_detection_db")
