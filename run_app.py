@@ -13,8 +13,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 # Import the main app from controllers
-from controllers.app_mongodb import app
-
+from src.controllers.app_mongodb import app
 if __name__ == '__main__':
     print("🚀 Starting FraudGuard Application...")
     print("📁 Using new optimized folder structure")

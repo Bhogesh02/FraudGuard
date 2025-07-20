@@ -9,7 +9,11 @@ from datetime import datetime, timezone
 from bson import ObjectId
 from config.mongodb_config import init_mongodb, create_user_collection, create_transaction_collection
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'templates'),
+    static_folder=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'static')
+)
 app.config['SECRET_KEY'] = os.urandom(24)
 
 # Initialize MongoDB
