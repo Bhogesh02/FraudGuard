@@ -3,46 +3,63 @@
 A modern, professional fraud detection web application built with Flask, MongoDB, and Machine Learning.
 
 ## 👥 **Team Members**
-
 - **Katna Lavanya** - Project Lead & Architect
 - **Molli Tejaswi** - ML Engineer  
 - **Mutchi Divya** - MERN stack developer 
 - **Kuppili Shirisha Rao** - Backend Developer
 
-## 🚀 **Quick Start**
+---
 
-### **Prerequisites**
-- Python 3.8+
-- MongoDB (local or cloud)
-- Required Python packages (see `requirements.txt`)
+## 🚀 **Getting Started: Step-by-Step**
 
-### **Installation & Setup**
+### 1. **Clone the Repository**
+```bash
+git clone <repository-url>
+cd Credit_Project
+```
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd Credit_Project
-   ```
+### 2. **Set Up a Virtual Environment (Recommended)**
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 3. **Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
 
-3. **Set up MongoDB**
-   - Install MongoDB locally or use MongoDB Atlas
-   - Update connection settings in `config/mongodb_config.py`
+### 4. **Configure MongoDB**
+- Install MongoDB locally **or** create a free cluster on [MongoDB Atlas](https://www.mongodb.com/atlas).
+- Update your connection string in `config/mongodb_config.py`.
 
-4. **Run the application**
-   ```bash
-   python run_app.py
-   ```
+### 5. **Train the Model (First-Time Setup Only)**
+> **IMPORTANT:**
+> If you are cloning the project for the first time and the following files are NOT present in `data/models/`:
+> - `fraud_detector_model.pkl`
+> - `amount_scaler.pkl`
+> - `model_feature_columns.pkl`
+> - (optionally) `optimal_threshold.pkl`
+>
+> **You MUST run the training script:**
+> ```bash
+> python train_model.py
+> ```
+> This will generate the required model files for fraud detection.
 
-5. **Access the application**
-   - Open your browser and go to: `http://127.0.0.1:5000`
-   - Login with demo credentials: `demo@example.com` / `password`
+### 6. **Run the Application**
+```bash
+python run_app.py
+```
+- The app will be available at: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
-## 📁 **Project Structure**
+### 7. **Login & Explore**
+- Register a new user or use demo credentials if provided.
+- Explore dashboard, fraud detection, analytics, and more!
+
+---
+
+## 📁 **Folder Structure**
 
 ```
 Credit_Project/
@@ -59,7 +76,7 @@ Credit_Project/
 ├── data/
 │   ├── models/              # Trained ML models (.pkl files)
 │   └── datasets/            # Raw data files
-├── static/                  # CSS, JS, images
+├── static/                  # CSS, JS, images, favicon
 ├── templates/               # HTML templates
 ├── tests/                   # Test files
 │   ├── unit/               # Unit tests
@@ -70,128 +87,91 @@ Credit_Project/
 └── run_app.py              # Application entry point
 ```
 
-## 🌐 **Available Pages**
+---
 
-### **Public Pages** (No login required)
-- `/` - Home/Login page
+## 🌐 **Key Pages & Routes**
+
+### **Public Pages**
+- `/` - Home/Login
 - `/about` - About FraudGuard
-- `/team` - Meet the team
+- `/team` - Development Team
 - `/support` - Support & Help Center
 
-### **Protected Pages** (Login required)
-- `/dashboard` - Main dashboard with analytics
-- `/detect` - Fraud detection interface
-- `/analytics` - Detailed analytics and charts
-- `/user-details` - User profile management
+### **Protected Pages (Login Required)**
+- `/dashboard` - Main dashboard
+- `/detect` - Fraud detection
+- `/analytics` - Analytics & charts
+- `/transactions` - All transactions (with pagination)
+- `/user-details` - Profile
 - `/settings` - Account settings
 
 ### **API Endpoints**
 - `/api/detect_fraud` - Fraud detection API
 - `/api/transaction_history` - Transaction history API
 
-## 🛠️ **Features**
-
-### **Core Functionality**
-- ✅ Real-time fraud detection using ML models
-- ✅ User authentication and session management
-- ✅ MongoDB database integration
-- ✅ Responsive modern UI with animations
-- ✅ Analytics dashboard with charts
-- ✅ Support system with contact forms
-
-### **Technical Features**
-- ✅ Machine Learning model integration
-- ✅ RESTful API endpoints
-- ✅ Secure password hashing
-- ✅ Session-based authentication
-- ✅ Real-time data visualization
-- ✅ Professional error handling
-
-### **UI/UX Features**
-- ✅ Modern dark theme design
-- ✅ Responsive navigation with active states
-- ✅ Animated cards and hover effects
-- ✅ Professional footer with team branding
-- ✅ Consistent styling across all pages
-
-## 🔧 **Configuration**
-
-### **MongoDB Setup**
-1. Update `config/mongodb_config.py` with your MongoDB connection string
-2. Ensure MongoDB is running locally or accessible via cloud
-
-### **Environment Variables**
-- `SECRET_KEY` - Flask secret key (auto-generated)
-- `MONGODB_URI` - MongoDB connection string
+---
 
 ## 🧪 **Testing**
 
-### **Run Tests**
+### **Run Automated Tests**
 ```bash
 # Unit tests
 python -m pytest tests/unit/
-
 # Integration tests
 python -m pytest tests/integration/
 ```
 
 ### **Manual Testing**
-1. Start the application: `python run_app.py`
-2. Test all navigation links
-3. Test fraud detection functionality
-4. Test user authentication
-5. Test support form submission
+1. Start the app: `python run_app.py`
+2. Register/login and navigate all pages
+3. Test fraud detection, analytics, and support
+4. Try edge cases (invalid login, large transactions, etc.)
 
-## 📞 **Support**
+---
 
-- **Email**: support@fraudguard.com
-- **Phone**: +1 234 567 890
-- **Team Lead**: Katna Lavanya
-- **Support Team**: Molli Tejaswi, Mutchi Divya, Kuppili Shirisha Rao
-
-## 🚀 **Deployment**
+## 🚀 **Deployment Guide**
 
 ### **Local Development**
 ```bash
 python run_app.py
 ```
 
-### **Production Deployment**
+### **Production Deployment (Recommended)**
 1. Set `debug=False` in `run_app.py`
-2. Use a production WSGI server (Gunicorn, uWSGI)
-3. Configure environment variables
-4. Set up proper MongoDB security
+2. Use a WSGI server (e.g., Gunicorn):
+   ```bash
+   gunicorn run_app:app
+   ```
+3. Set environment variables for secrets and DB connection
+4. Deploy to a cloud platform (Heroku, Render, AWS, etc.)
+5. Use a production MongoDB (Atlas or secured server)
 
-## 📊 **Model Information**
+---
 
-- **Model Type**: Machine Learning (scikit-learn)
-- **Features**: 29 engineered features
-- **Accuracy**: 95%+ detection rate
-- **Real-time**: Sub-second prediction time
+## 🛠️ **Features**
+- Real-time fraud detection (ML-powered)
+- User authentication & session management
+- MongoDB integration
+- Responsive, modern UI
+- Analytics dashboard
+- Support/contact system
+- Pagination for transactions
+- Professional error handling
 
-## 🔒 **Security Features**
+---
 
-- Password hashing with bcrypt
-- Session-based authentication
-- CSRF protection
-- Input validation and sanitization
-- Secure MongoDB connections
+## 📞 **Support**
+- **Email**: support@fraudguard.com
+- **Team Lead**: Katna Lavanya
 
-## 📈 **Performance**
-
-- **Response Time**: < 1 second for fraud detection
-- **Concurrent Users**: Supports multiple simultaneous users
-- **Database**: Optimized MongoDB queries
-- **Frontend**: Optimized CSS and JavaScript
+---
 
 ## 🎯 **Future Enhancements**
-
-- [ ] Real-time notifications
-- [ ] Advanced analytics dashboard
-- [ ] Mobile app development
-- [ ] API rate limiting
-- [ ] Advanced ML model training
-- [ ] Multi-language support
+- Real-time notifications
+- Advanced analytics
+- Mobile app
+- API rate limiting
+- Multi-language support
 
 ---
 
