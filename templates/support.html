@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - Support</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>FraudGuard</span>
+        </div>
+        <div class="navbar-nav">
+            <a href="/dashboard" class="nav-link">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            <a href="/detect" class="nav-link">
+                <i class="fas fa-search"></i>
+                Detect Fraud
+            </a>
+            <a href="/analytics" class="nav-link">
+                <i class="fas fa-chart-line"></i>
+                Analytics
+            </a>
+            <a href="/user-details" class="nav-link">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+            <a href="/about" class="nav-link">
+                <i class="fas fa-info-circle"></i>
+                About
+            </a>
+            <a href="/team" class="nav-link">
+                <i class="fas fa-users"></i>
+                Team
+            </a>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="username">Guest</div>
+                <div class="user-role">Visitor</div>
+            </div>
+            <a href="/login" class="btn btn-outline" style="margin-left: 1rem;">
+                <i class="fas fa-sign-in-alt"></i>
+                Login
+            </a>
+        </div>
+    </nav>
+    <div class="main-container">
+        <div class="card mb-4 pulse-glow">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-headset"></i>
+                    Support & Help Center
+                </h2>
+                <div class="real-time-indicator">
+                    <i class="fas fa-circle"></i>
+                    24/7 Team Support
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin: 0;">
+                Need help? Our team is here for you! Contact us, browse FAQs, or submit a support request below.
+            </p>
+        </div>
+        <div class="dashboard-grid">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-envelope"></i>
+                        Contact Information
+                    </h3>
+                </div>
+                <ul style="color: var(--text-secondary); font-size: 1rem;">
+                    <li>Email: <a href="mailto:support@fraudguard.com">support@fraudguard.com</a></li>
+                    <li>Phone: <a href="tel:+1234567890">+1 234 567 890</a></li>
+                    <li>Team Lead: Katna Lavanya</li>
+                    <li>Support Team: Molli Tejaswi, Mutchi Divya, Kuppili Shirisha Rao</li>
+                </ul>
+            </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-question-circle"></i>
+                        Frequently Asked Questions
+                    </h3>
+                </div>
+                <ul style="color: var(--text-secondary); font-size: 1rem;">
+                    <li><b>How do I reset my password?</b> Go to Profile &gt; Settings &gt; Change Password.</li>
+                    <li><b>How do I report a bug?</b> Use the form below or email us at support@fraudguard.com.</li>
+                    <li><b>How can I contact the team?</b> See the contact info or use the support form.</li>
+                    <li><b>Where can I learn more about the project?</b> Visit the About or Team pages.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit a Support Request
+                </h3>
+            </div>
+            <form method="post" action="/support" class="form-container">
+                <div class="form-group">
+                    <label for="name" class="form-label">Your Name</label>
+                    <input type="text" id="name" name="name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Your Email</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea id="message" name="message" class="form-input" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Submit
+                </button>
+            </form>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <p>&copy; 2024 FraudGuard. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/about" class="footer-link">About</a>
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="/support" class="footer-link active">Support</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

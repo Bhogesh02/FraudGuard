@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timezone
 from bson import ObjectId
-from mongodb_config import init_mongodb, create_user_collection, create_transaction_collection
+from config.mongodb_config import init_mongodb, create_user_collection, create_transaction_collection
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -35,11 +35,11 @@ MODEL_FEATURE_COLUMNS = None
 OPTIMAL_THRESHOLD = None    # Default threshold
 
 try:
-    ML_MODEL = joblib.load('fraud_detector_model.pkl')
-    AMOUNT_SCALER = joblib.load('amount_scaler.pkl')
-    MODEL_FEATURE_COLUMNS = joblib.load('model_feature_columns.pkl')
+    ML_MODEL = joblib.load('data/models/fraud_detector_model.pkl')
+    AMOUNT_SCALER = joblib.load('data/models/amount_scaler.pkl')
+    MODEL_FEATURE_COLUMNS = joblib.load('data/models/model_feature_columns.pkl')
     try:
-        OPTIMAL_THRESHOLD = joblib.load('optimal_threshold.pkl')
+        OPTIMAL_THRESHOLD = joblib.load('data/models/optimal_threshold.pkl')
         print(f"✓ Optimal threshold: {OPTIMAL_THRESHOLD:.4f}")
     except FileNotFoundError:
         OPTIMAL_THRESHOLD = 0.5  # Default threshold
@@ -593,6 +593,17 @@ def about():
 def team():
     # Public page - no authentication required
     return render_template('team.html', background_image="fraud_detection_bg.jpg", is_public=True)
+
+@app.route('/support', methods=['GET', 'POST'])
+def support():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        message = request.form.get('message')
+        # For now, just print the support request (could be logged or emailed)
+        print(f"[Support Request] Name: {name}, Email: {email}, Message: {message}")
+        return render_template('support.html', success=True)
+    return render_template('support.html')
 
 @app.route('/logout')
 def logout():
