@@ -5,54 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FraudGuard - Support</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='shield.png') }}">
 </head>
 <body>
-    <!-- Modern Navigation -->
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <i class="fas fa-shield-alt"></i>
-            <span>FraudGuard</span>
-        </div>
-        <div class="navbar-nav">
-            <a href="/dashboard" class="nav-link">
-                <i class="fas fa-tachometer-alt"></i>
-                Dashboard
-            </a>
-            <a href="/detect" class="nav-link">
-                <i class="fas fa-search"></i>
-                Detect Fraud
-            </a>
-            <a href="/analytics" class="nav-link">
-                <i class="fas fa-chart-line"></i>
-                Analytics
-            </a>
-            <a href="/user-details" class="nav-link">
-                <i class="fas fa-user"></i>
-                Profile
-            </a>
-            <a href="/about" class="nav-link">
-                <i class="fas fa-info-circle"></i>
-                About
-            </a>
-            <a href="/team" class="nav-link">
-                <i class="fas fa-users"></i>
-                Team
-            </a>
-        </div>
-        <div class="user-profile">
-            <div class="user-avatar">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="user-info">
-                <div class="username">Guest</div>
-                <div class="user-role">Visitor</div>
-            </div>
-            <a href="/login" class="btn btn-outline" style="margin-left: 1rem;">
-                <i class="fas fa-sign-in-alt"></i>
-                Login
-            </a>
-        </div>
-    </nav>
+    {% include 'navbar_logged_in.html' %}
     <div class="main-container">
         <div class="card mb-4 pulse-glow">
             <div class="card-header">
@@ -125,18 +81,8 @@
             </form>
         </div>
     </div>
-    <footer class="footer">
-        <div class="footer-content">
-            <div>
-                <p>&copy; 2024 FraudGuard. All rights reserved.</p>
-            </div>
-            <div class="footer-links">
-                <a href="/about" class="footer-link">About</a>
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/terms" class="footer-link">Terms</a>
-                <a href="/support" class="footer-link active">Support</a>
-            </div>
-        </div>
-    </footer>
+    {% if session.get('user_id') %}
+        {% include 'footer.html' %}
+    {% endif %}
 </body>
 </html> 

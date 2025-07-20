@@ -8,6 +8,7 @@ import numpy as np
 from datetime import datetime, timezone
 from bson import ObjectId
 from config.mongodb_config import init_mongodb, create_user_collection, create_transaction_collection
+from functools import wraps
 
 app = Flask(
     __name__,
@@ -379,11 +380,17 @@ def register():
     
     return render_template('register.html', background_image="fraud_detection_bg.jpg")
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/dashboard')
+@login_required
 def dashboard():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    
     user_id = session.get('user_id')
     
     # Get user statistics
@@ -462,10 +469,8 @@ def dashboard():
                          recent_activities=recent_activities)
 
 @app.route('/analytics')
+@login_required
 def analytics():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    
     user_id = session.get('user_id')
     transactions = list(transactions_collection.find({"user_id": user_id}))
     
@@ -491,10 +496,8 @@ def analytics():
                          categories=categories)
 
 @app.route('/transactions')
+@login_required
 def transactions():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    
     user_id = session.get('user_id')
     transactions = list(transactions_collection.find({"user_id": user_id}).sort("timestamp", -1))
     
@@ -503,24 +506,19 @@ def transactions():
                          transactions=transactions)
 
 @app.route('/settings')
+@login_required
 def settings():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    
     return render_template('settings.html',
                          username=session.get('user_name', 'User'))
 
 @app.route('/detect', methods=['GET'])
+@login_required
 def detect_page():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
     return render_template('detect_user_friendly.html', username=session.get('user_name', 'User'))
 
 @app.route('/user-details')
+@login_required
 def user_details():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    
     user_id = session.get('user_id')
     
     # Get user data
@@ -601,13 +599,17 @@ def team():
 @app.route('/support', methods=['GET', 'POST'])
 def support():
     if request.method == 'POST':
-        name = request.form.get('name')
-        email = request.form.get('email')
-        message = request.form.get('message')
-        # For now, just print the support request (could be logged or emailed)
-        print(f"[Support Request] Name: {name}, Email: {email}, Message: {message}")
+        # Just show a success message, do not send email
         return render_template('support.html', success=True)
     return render_template('support.html')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
 
 @app.route('/logout')
 def logout():

@@ -1,0 +1,48 @@
+<nav class="navbar" style="display: flex; align-items: center; justify-content: space-between;">
+    <div class="navbar-brand" style="flex: 0 0 auto;">
+        <i class="fas fa-shield-alt" style="color: var(--primary-color); font-size: 2.2rem; vertical-align: middle; margin-right: 0.5rem;"></i>
+        <span>FraudGuard</span>
+    </div>
+    <div class="navbar-nav" style="flex: 1 1 auto; justify-content: center; display: flex; gap: 2rem;">
+        <a href="/dashboard" class="nav-link{% if request.path == '/dashboard' %} active{% endif %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/detect" class="nav-link{% if request.path.startswith('/detect') %} active{% endif %}"><i class="fas fa-search"></i> Detect Fraud</a>
+        <a href="/analytics" class="nav-link{% if request.path == '/analytics' %} active{% endif %}"><i class="fas fa-chart-line"></i> Analytics</a>
+    </div>
+    <div class="navbar-nav" style="flex: 0 0 auto; margin-left: auto;">
+        <div class="dropdown" style="position: relative;">
+            <button class="btn btn-outline" style="min-width:140px; display: flex; align-items: center; gap: 0.5rem;" onclick="this.nextElementSibling.classList.toggle('show')">
+                <span class="user-avatar-navbar" style="display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--primary-color); color: #fff; font-weight: 700; font-size: 1.1rem;">{{ session.get('user_name', 'U')[0]|upper }}</span>
+                <span style="font-weight: 600;">{{ session.get('user_name', 'User') }}</span>
+                <i class="fas fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content" style="display: none; position: absolute; right: 0; background: #1e293b; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 1001; border-radius: 8px; overflow: hidden;">
+                <div style="padding: 0.75rem 1rem; font-weight: 600; color: var(--primary-color); border-bottom: 1px solid var(--border-color);">Account</div>
+                <a href="/user-details" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; color: var(--text-primary); text-decoration: none;">
+                    <i class="fas fa-user-circle"></i> Profile
+                </a>
+                <a href="/logout" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; color: var(--text-primary); text-decoration: none;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+    <script>
+    // Professional dropdown toggle
+    document.querySelectorAll('.dropdown .btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelectorAll('.dropdown-content').forEach(dc => dc.classList.remove('show'));
+            let content = this.nextElementSibling;
+            content.classList.toggle('show');
+        });
+    });
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.dropdown-content').forEach(dc => dc.classList.remove('show'));
+    });
+    </script>
+    <style>
+    .dropdown-content.show { display: block !important; animation: fadeIn 0.2s; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .dropdown-content a:hover { background: var(--background-card); color: var(--primary-color); }
+    </style>
+</nav> 

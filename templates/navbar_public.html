@@ -1,0 +1,11 @@
+<nav class="navbar">
+    <div class="navbar-brand">
+        <i class="fas fa-shield-alt" style="color: var(--primary-color); font-size: 2.2rem; vertical-align: middle; margin-right: 0.5rem;"></i>
+        <span>FraudGuard</span>
+    </div>
+    <div class="navbar-nav">
+        <a href="/about" class="nav-link{% if request.path == '/about' %} active{% endif %}"><i class="fas fa-info-circle"></i> About</a>
+        <a href="/team" class="nav-link{% if request.path == '/team' %} active{% endif %}"><i class="fas fa-users"></i> Team</a>
+        <a href="/login" class="btn btn-outline{% if request.path == '/login' %} active{% endif %}" style="margin-left: 1rem;"><i class="fas fa-sign-in-alt"></i> Login</a>
+    </div>
+</nav> 

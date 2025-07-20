@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - Privacy Policy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if session.get('user_id') %}
+        {% include 'navbar_logged_in.html' %}
+    {% else %}
+        {% include 'navbar_public.html' %}
+    {% endif %}
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-user-shield"></i> Privacy Policy</h2>
+            </div>
+            <div style="padding: 1.5rem;">
+                <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    <i class="fas fa-lock" style="color: var(--primary-color);"></i>
+                    <strong>Your privacy matters to us!</strong> At FraudGuard, we are committed to protecting your personal information and being transparent about how we use it.
+                </p>
+                <h3><i class="fas fa-database"></i> What We Collect</h3>
+                <ul style="margin-bottom: 1rem;">
+                    <li>Basic account information (name, email)</li>
+                    <li>Transaction data for fraud analysis</li>
+                    <li>Usage analytics to improve our service</li>
+                </ul>
+                <h3><i class="fas fa-user-check"></i> How We Use Your Data</h3>
+                <ul style="margin-bottom: 1rem;">
+                    <li>To detect and prevent fraudulent activity</li>
+                    <li>To personalize your experience</li>
+                    <li>To improve our AI and analytics</li>
+                </ul>
+                <h3><i class="fas fa-user-shield"></i> Your Rights</h3>
+                <ul style="margin-bottom: 1rem;">
+                    <li>Access, correct, or delete your data at any time</li>
+                    <li>Contact support for privacy-related requests</li>
+                </ul>
+                <div style="margin-top: 2rem; color: var(--success-color); font-weight: 600;">
+                    <i class="fas fa-smile"></i> We never sell your data. Your trust is our top priority!
+                </div>
+            </div>
+        </div>
+    </div>
+{% include 'footer.html' %}
+</body>
+</html> 

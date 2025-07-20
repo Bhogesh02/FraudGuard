@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FraudGuard - Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='shield.png') }}">
 </head>
 <body>
     <!-- Modern Navigation -->
     <nav class="navbar">
         <div class="navbar-brand">
-            <i class="fas fa-shield-alt"></i>
+            <i class="fas fa-shield-alt" style="color: var(--primary-color); font-size: 2.2rem; vertical-align: middle; margin-right: 0.5rem;"></i>
             <span>FraudGuard</span>
         </div>
-        
         <div class="navbar-nav">
             <a href="/about" class="nav-link">
                 <i class="fas fa-info-circle"></i>
@@ -22,13 +22,6 @@
             <a href="/team" class="nav-link">
                 <i class="fas fa-users"></i>
                 Team
-            </a>
-        </div>
-        
-        <div class="navbar-nav">
-            <a href="/register" class="btn btn-outline">
-                <i class="fas fa-user-plus"></i>
-                Register
             </a>
         </div>
     </nav>
@@ -116,21 +109,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Professional Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div>
-                <p>&copy; 2024 FraudGuard. All rights reserved.</p>
-            </div>
-            <div class="footer-links">
-                <a href="/about" class="footer-link">About</a>
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/terms" class="footer-link">Terms</a>
-                <a href="/support" class="footer-link">Support</a>
-            </div>
-        </div>
-    </footer>
 
     <script>
         // Add form validation

@@ -225,46 +225,11 @@
     </style>
 </head>
 <body>
-    <!-- Modern Navigation -->
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <i class="fas fa-shield-alt"></i>
-            <span>FraudGuard</span>
-        </div>
-        
-        <div class="navbar-nav">
-            <a href="/" class="nav-link">
-                <i class="fas fa-home"></i>
-                Home
-            </a>
-            <a href="/about" class="nav-link">
-                <i class="fas fa-info-circle"></i>
-                About
-            </a>
-            <a href="/team" class="nav-link">
-                <i class="fas fa-users"></i>
-                Team
-            </a>
-            <a href="/login" class="nav-link">
-                <i class="fas fa-sign-in-alt"></i>
-                Login
-            </a>
-        </div>
-        
-        <div class="user-profile">
-            <div class="user-avatar">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="user-info">
-                <div class="username">Guest</div>
-                <div class="user-role">Visitor</div>
-            </div>
-            <a href="/login" class="btn btn-outline" style="margin-left: 1rem;">
-                <i class="fas fa-sign-in-alt"></i>
-                Login
-            </a>
-        </div>
-    </nav>
+    {% if session.get('user_id') %}
+        {% include 'navbar_logged_in.html' %}
+    {% else %}
+        {% include 'navbar_public.html' %}
+    {% endif %}
 
     <div class="main-container">
         <!-- Team Header -->
@@ -536,5 +501,8 @@
             </div>
         </div>
     </div>
+    {% if session.get('user_id') %}
+        {% include 'footer.html' %}
+    {% endif %}
 </body>
 </html> 

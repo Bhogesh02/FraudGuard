@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - Terms and Conditions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if session.get('user_id') %}
+        {% include 'navbar_logged_in.html' %}
+    {% else %}
+        {% include 'navbar_public.html' %}
+    {% endif %}
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-file-contract"></i> Terms and Conditions</h2>
+            </div>
+            <div style="padding: 1.5rem;">
+                <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    <i class="fas fa-handshake" style="color: var(--primary-color);"></i>
+                    <strong>Welcome to FraudGuard!</strong> By using our service, you agree to the following terms and conditions.
+                </p>
+                <h3><i class="fas fa-check-circle"></i> Acceptance of Terms</h3>
+                <ul style="margin-bottom: 1rem;">
+                    <li>By accessing FraudGuard, you accept these terms in full.</li>
+                    <li>If you disagree with any part, please do not use our service.</li>
+                </ul>
+                <h3><i class="fas fa-cogs"></i> Use of Service</h3>
+                <ul style="margin-bottom: 1rem;">
+                    <li>Use FraudGuard only for lawful purposes.</li>
+                    <li>Do not attempt to disrupt or misuse the service.</li>
+                </ul>
+                <h3><i class="fas fa-balance-scale"></i> Limitation of Liability</h3>
+                <ul style="margin-bottom: 1rem;">
+                    <li>We strive for accuracy, but cannot guarantee error-free operation.</li>
+                    <li>FraudGuard is not liable for any damages from use or inability to use the service.</li>
+                </ul>
+                <div style="margin-top: 2rem; color: var(--primary-color); font-weight: 600;">
+                    <i class="fas fa-thumbs-up"></i> Thank you for trusting FraudGuard to protect your transactions!
+                </div>
+            </div>
+        </div>
+    </div>
+{% include 'footer.html' %}
+</body>
+</html> 

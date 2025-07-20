@@ -2,33 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Transactions - FraudGuard</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - Transactions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='shield.png') }}">
+    <style>
+        .pagination { display: flex; justify-content: center; margin: 2rem 0 0 0; gap: 0.5rem; }
+        .pagination-btn { background: var(--background-card); color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .pagination-btn.active, .pagination-btn:hover { background: var(--primary-color); color: #fff; }
+        .styled-table th, .styled-table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 0.75rem 0.5rem;
+            white-space: nowrap;
+        }
+        .styled-table th {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .styled-table td {
+            font-size: 1rem;
+        }
+        .styled-table .fraud-result {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 110px;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .styled-table .fraud {
+            background: rgba(220,38,38,0.1);
+            color: #dc2626;
+            border: 2px solid #dc2626;
+        }
+        .styled-table .legitimate {
+            background: rgba(22,163,74,0.1);
+            color: #16a34a;
+            border: 2px solid #16a34a;
+        }
+    </style>
 </head>
 <body>
-    <h1>Transactions</h1>
-    <p>This is a placeholder for the transactions page.</p>
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Location</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Example row -->
-            <tr>
-                <td>2024-07-20</td>
-                <td>$100.00</td>
-                <td>Groceries</td>
-                <td>New York</td>
-                <td>Legitimate</td>
-            </tr>
-        </tbody>
-    </table>
-    <p>Add your transaction data here.</p>
+{% if session.get('user_id') %}
+    {% include 'navbar_logged_in.html' %}
+{% else %}
+    {% include 'navbar_public.html' %}
+{% endif %}
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-list"></i> Your Transactions</h2>
+            </div>
+            {% if transactions and transactions|length > 0 %}
+            <div style="overflow-x:auto;">
+                <table class="styled-table" id="transactions-table" style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-tbody">
+                        <!-- Rows will be rendered by JS for pagination -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+            <script>
+                const transactions = [
+                    {% for tx in transactions %}
+                    {
+                        date: "{{ tx.date if tx.date is defined else (tx.timestamp.strftime('%Y-%m-%d %H:%M') if tx.timestamp is defined else 'N/A') }}",
+                        amount: {{ tx.transaction_data.amount if tx.transaction_data.amount is defined else 'null' }},
+                        category: "{{ tx.transaction_data.category or 'N/A' }}",
+                        location: "{{ tx.transaction_data.location or 'N/A' }}",
+                        is_fraud: {{ 'true' if tx.is_fraud else 'false' }}
+                    },
+                    {% endfor %}
+                ];
+                const rowsPerPage = 10;
+                let currentPage = 1;
+                function renderTable(page) {
+                    const tbody = document.getElementById('transactions-tbody');
+                    tbody.innerHTML = '';
+                    const start = (page - 1) * rowsPerPage;
+                    const end = Math.min(start + rowsPerPage, transactions.length);
+                    for (let i = start; i < end; i++) {
+                        const tx = transactions[i];
+                        tbody.innerHTML += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${tx.date}</td>
+                            <td>${tx.amount !== null ? '$' + tx.amount.toFixed(2) : 'N/A'}</td>
+                            <td>${tx.category}</td>
+                            <td>${tx.location}</td>
+                            <td>
+                                ${tx.is_fraud ? '<span class="fraud-result fraud"><i class="fas fa-exclamation-triangle"></i> Fraud</span>' : '<span class="fraud-result legitimate"><i class="fas fa-check-circle"></i> Legitimate</span>'}
+                            </td>
+                        </tr>
+                        `;
+                    }
+                }
+                function renderPagination() {
+                    const pagination = document.getElementById('pagination');
+                    pagination.innerHTML = '';
+                    const pageCount = Math.ceil(transactions.length / rowsPerPage);
+                    for (let i = 1; i <= pageCount; i++) {
+                        pagination.innerHTML += `<button class="pagination-btn${i === currentPage ? ' active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                    }
+                }
+                function goToPage(page) {
+                    currentPage = page;
+                    renderTable(page);
+                    renderPagination();
+                }
+                // Initial render
+                renderTable(currentPage);
+                renderPagination();
+            </script>
+            {% else %}
+            <div style="text-align:center; color:var(--text-secondary); padding:2rem;">
+                <i class="fas fa-folder-open" style="font-size:2.5rem; color:var(--primary-color);"></i>
+                <p style="margin-top:1rem; font-size:1.1rem;">No transactions found. Your recent transactions will appear here.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% include 'footer.html' %}
 </body>
 </html> 
