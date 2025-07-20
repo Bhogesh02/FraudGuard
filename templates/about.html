@@ -368,20 +368,21 @@
                 </h2>
             </div>
             <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-                Our fraud detection system uses a sophisticated multi-stage approach to identify fraudulent transactions.
+                Our fraud detection system uses a sophisticated multi-stage approach to identify fraudulent transactions with advanced AI algorithms and real-time analysis.
             </p>
             
             <div class="analytics-container">
                 <div class="chart-container">
                     <h3 class="card-title">
                         <i class="fas fa-database"></i>
-                        Data Processing
+                        Data Processing & Collection
                     </h3>
                     <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
-                        <li>Transaction data collection and preprocessing</li>
-                        <li>Feature engineering and normalization</li>
-                        <li>Data validation and quality checks</li>
-                        <li>Real-time data transformation</li>
+                        <li><strong>Transaction Data Collection:</strong> Real-time capture of transaction amounts, merchant categories, locations, and timestamps</li>
+                        <li><strong>Feature Engineering:</strong> Advanced feature creation including logarithmic transformations, interaction features, and time-based patterns</li>
+                        <li><strong>Data Validation:</strong> Comprehensive quality checks and outlier detection for data integrity</li>
+                        <li><strong>Real-time Transformation:</strong> Dynamic conversion of user inputs into model-ready numerical features</li>
+                        <li><strong>Pattern Recognition:</strong> Identification of suspicious transaction patterns and behavioral anomalies</li>
                     </ul>
                 </div>
                 
@@ -391,25 +392,61 @@
                         Machine Learning Analysis
                     </h3>
                     <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
-                        <li>Multiple ML models for ensemble prediction</li>
-                        <li>Feature importance analysis</li>
-                        <li>Probability score calculation</li>
-                        <li>Risk factor identification</li>
+                        <li><strong>Ensemble Models:</strong> Multiple ML algorithms including Random Forest, Gradient Boosting, and Logistic Regression</li>
+                        <li><strong>Feature Importance Analysis:</strong> Advanced analysis of V1-V28 features and their correlation with fraud patterns</li>
+                        <li><strong>Probability Score Calculation:</strong> Precise fraud probability scoring with confidence intervals</li>
+                        <li><strong>Risk Factor Identification:</strong> Multi-dimensional risk assessment including amount, location, time, and merchant category</li>
+                        <li><strong>Anomaly Detection:</strong> Isolation Forest algorithms for detecting unusual transaction patterns</li>
+                        <li><strong>Cross-validation:</strong> Robust model validation using k-fold cross-validation techniques</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="analytics-container" style="margin-top: 2rem;">
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Result Generation & Analysis
+                    </h3>
+                    <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                        <li><strong>Fraud Probability Scoring:</strong> Real-time calculation of fraud likelihood with percentage confidence</li>
+                        <li><strong>Detailed Explanation Generation:</strong> Comprehensive breakdown of why a transaction was flagged as fraudulent</li>
+                        <li><strong>Risk Factor Breakdown:</strong> Specific identification of high-risk indicators (amount, location, timing, category)</li>
+                        <li><strong>Actionable Recommendations:</strong> Clear guidance on whether to approve, reject, or investigate further</li>
+                        <li><strong>Transaction History:</strong> Persistent storage of analysis results in MongoDB for audit trails</li>
+                        <li><strong>Real-time Alerts:</strong> Immediate notification system for high-risk transactions</li>
+                    </ul>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Security & Performance
+                    </h3>
+                    <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                        <li><strong>Multi-layer Security:</strong> Authentication, encryption, and secure API endpoints</li>
+                        <li><strong>Scalable Architecture:</strong> MongoDB integration for handling large transaction volumes</li>
+                        <li><strong>Real-time Processing:</strong> Sub-second response times for instant fraud detection</li>
+                        <li><strong>Model Persistence:</strong> Optimized model storage and loading for consistent performance</li>
+                        <li><strong>User-friendly Interface:</strong> Intuitive web interface with responsive design</li>
+                        <li><strong>Audit Trail:</strong> Complete transaction history and analysis logs for compliance</li>
                     </ul>
                 </div>
             </div>
             
             <div class="chart-container" style="margin-top: 2rem;">
                 <h3 class="card-title">
-                    <i class="fas fa-chart-pie"></i>
-                    Result Generation
+                    <i class="fas fa-robot"></i>
+                    Advanced AI Features
                 </h3>
                 <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
-                    <li>Fraud probability scoring</li>
-                    <li>Detailed explanation generation</li>
-                    <li>Risk factor breakdown</li>
-                    <li>Actionable recommendations</li>
-            </ul>
+                    <li><strong>Behavioral Analysis:</strong> Learning from user transaction patterns and historical data</li>
+                    <li><strong>Adaptive Thresholds:</strong> Dynamic adjustment of fraud detection sensitivity based on transaction context</li>
+                    <li><strong>Geographic Risk Assessment:</strong> Location-based fraud probability calculations</li>
+                    <li><strong>Temporal Pattern Recognition:</strong> Time-of-day and seasonal fraud pattern detection</li>
+                    <li><strong>Merchant Category Analysis:</strong> Industry-specific risk assessment for different business types</li>
+                    <li><strong>Amount Pattern Detection:</strong> Recognition of suspicious transaction amounts and frequency patterns</li>
+                </ul>
             </div>
         </div>
 
