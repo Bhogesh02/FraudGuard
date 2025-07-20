@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>FraudGuard</span>
+        </div>
+        
+        <div class="navbar-nav">
+            <a href="/dashboard" class="nav-link">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            <a href="/detect" class="nav-link">
+                <i class="fas fa-search"></i>
+                Detect Fraud
+            </a>
+            <a href="/analytics" class="nav-link active">
+                <i class="fas fa-chart-line"></i>
+                Analytics
+            </a>
+            <a href="/user-details" class="nav-link">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+        </div>
+        
+        <div class="user-profile">
+            <div class="user-avatar">
+                {{ username[0].upper() if username else 'U' }}
+            </div>
+            <div class="user-info">
+                <div class="username">{{ username }}</div>
+                <div class="user-role">Security Analyst</div>
+            </div>
+            <a href="/logout" class="btn btn-outline" style="margin-left: 1rem;">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- Analytics Header -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-chart-line"></i>
+                    Analytics Overview
+                </h2>
+                <div class="real-time-indicator">
+                    <i class="fas fa-circle"></i>
+                    Live Data
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-number">${{ "{:,.2f}".format(total_amount) }}</div>
+                    <div class="stat-label">Total Transaction Value</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-number">${{ "{:,.2f}".format(fraud_amount) }}</div>
+                    <div class="stat-label">Fraud Amount Detected</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="stat-number">${{ "{:,.2f}".format(avg_amount) }}</div>
+                    <div class="stat-label">Average Transaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-number">{{ "{:.1f}".format((fraud_amount/total_amount)*100) if total_amount > 0 else 0 }}%</div>
+                    <div class="stat-label">Fraud Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="analytics-container">
+            <div class="chart-container">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-chart-pie"></i>
+                    Transaction Categories
+                </h3>
+                <canvas id="categoryChart" width="400" height="200"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-chart-bar"></i>
+                    Fraud Detection Timeline
+                </h3>
+                <canvas id="timelineChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-list"></i>
+                    Category Breakdown
+                </h3>
+            </div>
+            
+            <div class="dashboard-grid">
+                {% for category, count in categories.items() %}
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <div class="stat-number">{{ count }}</div>
+                    <div class="stat-label">{{ category.title() }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Risk Analysis -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Risk Analysis
+                </h3>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--success-color);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-number" style="color: var(--success-color);">{{ total_transactions - fraud_count }}</div>
+                    <div class="stat-label">Legitimate Transactions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--secondary-color);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-number" style="color: var(--secondary-color);">{{ fraud_count }}</div>
+                    <div class="stat-label">Fraudulent Transactions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--warning-color);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-number" style="color: var(--warning-color);">{{ "{:.1f}".format((fraud_count/total_transactions)*100) if total_transactions > 0 else 0 }}%</div>
+                    <div class="stat-label">Risk Level</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--primary-color);">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <div class="stat-number" style="color: var(--primary-color);">{{ "{:.1f}".format(((total_transactions - fraud_count)/total_transactions)*100) if total_transactions > 0 else 0 }}%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <p>&copy; 2024 FraudGuard. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/about" class="footer-link">About</a>
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="/support" class="footer-link">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Category Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        const categoryChart = new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: {{ categories.keys() | list | tojson }},
+                datasets: [{
+                    data: {{ categories.values() | list | tojson }},
+                    backgroundColor: [
+                        '#2563eb',
+                        '#dc2626',
+                        '#16a34a',
+                        '#ca8a04',
+                        '#7c3aed',
+                        '#db2777',
+                        '#059669',
+                        '#ea580c'
+                    ],
+                    borderWidth: 2,
+                    borderColor: 'var(--background-card)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#f8fafc',
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+
+        // Timeline Chart
+        const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+        const timelineChart = new Chart(timelineCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Transactions',
+                    data: [65, 59, 80, 81, 56, 55],
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Fraud Alerts',
+                    data: [28, 48, 40, 19, 86, 27],
+                    borderColor: '#dc2626',
+                    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#f8fafc'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#cbd5e1'
+                        },
+                        grid: {
+                            color: '#334155'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#cbd5e1'
+                        },
+                        grid: {
+                            color: '#334155'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Real-time updates
+        setInterval(() => {
+            // Update timeline chart with new data
+            const newData = timelineChart.data.datasets[0].data.map(() => 
+                Math.floor(Math.random() * 100)
+            );
+            timelineChart.data.datasets[0].data = newData;
+            timelineChart.update('none');
+        }, 10000);
+
+        // Add notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                ${message}
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Simulate real-time analytics updates
+        setInterval(() => {
+            const messages = [
+                'New data points added',
+                'Analytics updated',
+                'Chart refreshed',
+                'Risk assessment completed'
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            if (Math.random() > 0.7) { // 30% chance
+                showNotification(randomMessage, 'success');
+            }
+        }, 12000);
+    </script>
+</body>
+</html> 

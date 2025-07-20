@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - Our Team</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Enhanced animations and cool effects */
+        .card {
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .stat-card {
+            animation: fadeInScale 0.8s ease-out;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.3);
+        }
+        
+        .team-member-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1rem 0;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
+        }
+        
+        .team-member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .team-member-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .team-member-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(37, 99, 235, 0.3);
+        }
+        
+        .project-lead {
+            border-color: rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(15, 23, 42, 0.95));
+        }
+        
+        .project-lead::before {
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+        }
+        
+        .lead-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--success-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .project-lead .member-avatar {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+        
+        .team-member-card:hover .member-avatar {
+            transform: scale(1.1);
+        }
+        
+        .member-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .member-role {
+            color: var(--primary-color);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .member-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .skill-tag {
+            background: rgba(37, 99, 235, 0.2);
+            color: var(--primary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .skill-tag:hover {
+            background: rgba(37, 99, 235, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .project-lead .skill-tag {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        
+        .project-lead .skill-tag:hover {
+            background: rgba(255, 215, 0, 0.3);
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulseGlow {
+            from {
+                box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
+            }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--success-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+        
+        .mission-highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(22, 163, 74, 0.1));
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mission-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .mission-highlight:hover::before {
+            left: 100%;
+        }
+        
+        .mission-highlight:hover {
+            transform: translateX(5px);
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>FraudGuard</span>
+        </div>
+        
+        <div class="navbar-nav">
+            <a href="/" class="nav-link">
+                <i class="fas fa-home"></i>
+                Home
+            </a>
+            <a href="/about" class="nav-link">
+                <i class="fas fa-info-circle"></i>
+                About
+            </a>
+            <a href="/team" class="nav-link">
+                <i class="fas fa-users"></i>
+                Team
+            </a>
+            <a href="/login" class="nav-link">
+                <i class="fas fa-sign-in-alt"></i>
+                Login
+            </a>
+        </div>
+        
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="username">Guest</div>
+                <div class="user-role">Visitor</div>
+            </div>
+            <a href="/login" class="btn btn-outline" style="margin-left: 1rem;">
+                <i class="fas fa-sign-in-alt"></i>
+                Login
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- Team Header -->
+        <div class="card mb-4 pulse-glow">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-users"></i>
+                    Meet Our Team
+                </h2>
+                <div class="real-time-indicator">
+                    <i class="fas fa-circle"></i>
+                    Innovation Leaders
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin: 0;">
+                Our dedicated team of cybersecurity experts, data scientists, and software engineers work together to create cutting-edge fraud detection solutions that protect millions of users worldwide.
+            </p>
+            
+            <div class="dashboard-grid" style="margin-top: 2rem;">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number gradient-text">4</div>
+                    <div class="stat-label">Team Members</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="stat-number gradient-text">1000+</div>
+                    <div class="stat-label">Lines of Code</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-number gradient-text">24/7</div>
+                    <div class="stat-label">Support</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-number gradient-text">95%+</div>
+                    <div class="stat-label">Accuracy Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Mission -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-bullseye"></i>
+                    Our Mission
+                </h2>
+            </div>
+            <div class="mission-highlight">
+                <p style="color: var(--text-secondary); margin: 0; font-size: 1.1rem; line-height: 1.8;">
+                    <strong style="color: var(--primary-color);">"To revolutionize fraud detection through innovative AI technology,</strong> 
+                    providing businesses and individuals with reliable, real-time protection against financial fraud while maintaining the highest standards of security and user experience."
+                </p>
+            </div>
+        </div>
+
+        <!-- Team Members -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-user-friends"></i>
+                    Core Team
+                </h2>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- Katna Lavanya -->
+                <div class="team-member-card">
+                    <div class="member-avatar">KL</div>
+                    <div class="member-name">Katna Lavanya</div>
+                    <div class="member-role">Project Lead & Architect</div>
+                    <div class="member-skills">
+                        <span class="skill-tag">Leadership</span>
+                        <span class="skill-tag">Architecture</span>
+                        <span class="skill-tag">Strategy</span>
+                        <span class="skill-tag">Management</span>
+                    </div>
+                </div>
+                
+                <!-- Molli Tejaswi -->
+                <div class="team-member-card">
+                    <div class="member-avatar">MT</div>
+                    <div class="member-name">Molli Tejaswi</div>
+                    <div class="member-role">ML Engineer</div>
+                    <div class="member-skills">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">ML</span>
+                        <span class="skill-tag">AI</span>
+                        <span class="skill-tag">Data Science</span>
+                    </div>
+                </div>
+                
+                <!-- Mutchi Divya -->
+                <div class="team-member-card">
+                    <div class="member-avatar">MD</div>
+                    <div class="member-name">Mutchi Divya</div>
+                    <div class="member-role">Frontend Developer</div>
+                    <div class="member-skills">
+                        <span class="skill-tag">HTML/CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">UI/UX</span>
+                        <span class="skill-tag">Database</span>
+                    </div>
+                </div>
+                
+                <!-- Kuppili Shirisha Rao -->
+                <div class="team-member-card">
+                    <div class="member-avatar">KS</div>
+                    <div class="member-name">Kuppili Shirisha Rao</div>
+                    <div class="member-role">Backend Developer</div>
+                    <div class="member-skills">
+                        <span class="skill-tag">Flask</span>
+                        <span class="skill-tag">API</span>
+                        <span class="skill-tag">Database</span>
+                        <span class="skill-tag">Python</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Values -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-heart"></i>
+                    Our Values
+                </h2>
+            </div>
+            
+            <div class="analytics-container">
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-lightbulb"></i>
+                        Innovation
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        We constantly push the boundaries of what's possible in fraud detection, leveraging cutting-edge AI and machine learning technologies to stay ahead of evolving threats.
+                    </p>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-shield-virus"></i>
+                        Security First
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        Every decision we make prioritizes the security and privacy of our users. We implement industry-leading security practices to protect sensitive data.
+                    </p>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-users"></i>
+                        Collaboration
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        We believe in the power of teamwork. Our diverse team brings together expertise from various domains to create comprehensive solutions.
+                    </p>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-star"></i>
+                        Excellence
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        We strive for excellence in everything we do, from code quality to user experience, ensuring our solutions meet the highest standards.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Achievements -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-trophy"></i>
+                    Achievements
+                </h2>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-number">95%+</div>
+                    <div class="stat-label">Detection Accuracy</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="stat-number">Real-time</div>
+                    <div class="stat-label">Processing Speed</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Security Compliance</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <div class="stat-number">99%</div>
+                    <div class="stat-label">User Satisfaction</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact & Support -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-envelope"></i>
+                    Get In Touch
+                </h2>
+            </div>
+            
+            <div class="analytics-container">
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-headset"></i>
+                        Support
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        Need technical assistance or have questions about our fraud detection system? Our team is here to help you 24/7.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <a href="/about" class="btn btn-primary">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-rocket"></i>
+                        Innovation
+                    </h3>
+                    <p style="color: var(--text-secondary);">
+                        Interested in our latest developments or want to contribute to our open-source projects? Join our community of innovators.
+                    </p>
+                    <div style="margin-top: 1rem;">
+                        <a href="/detect" class="btn btn-outline">
+                            <i class="fas fa-search"></i> Try Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

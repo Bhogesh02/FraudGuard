@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Test - FraudGuard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: DOM Element Access</h2>
+        <div id="test-result-1">Testing...</div>
+        <button onclick="testDOMAccess()">Test DOM Access</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Form Handling</h2>
+        <form id="testForm">
+            <input type="number" name="amount" value="100" required>
+            <select name="merchant_category" required>
+                <option value="groceries">Groceries</option>
+                <option value="electronics">Electronics</option>
+            </select>
+            <select name="location" required>
+                <option value="same city">Same City</option>
+                <option value="international">International</option>
+            </select>
+            <select name="time_of_day" required>
+                <option value="morning">Morning</option>
+                <option value="night">Night</option>
+            </select>
+            <button type="submit">Test Form Submission</button>
+        </form>
+        <div id="test-result-2">Form test results will appear here...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: API Call Simulation</h2>
+        <button onclick="testAPICall()">Test API Call</button>
+        <div id="test-result-3">API test results will appear here...</div>
+    </div>
+
+    <script>
+        // Test 1: DOM Element Access
+        function testDOMAccess() {
+            const resultDiv = document.getElementById('test-result-1');
+            const form = document.getElementById('testForm');
+            
+            if (resultDiv && form) {
+                resultDiv.innerHTML = '<span class="success">✓ DOM elements found successfully!</span>';
+                resultDiv.innerHTML += '<br><span class="info">Form ID: ' + form.id + '</span>';
+                resultDiv.innerHTML += '<br><span class="info">Result div ID: ' + resultDiv.id + '</span>';
+            } else {
+                resultDiv.innerHTML = '<span class="error">✗ DOM elements not found!</span>';
+            }
+        }
+        
+        // Test 2: Form Handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('testForm');
+            const resultDiv = document.getElementById('test-result-2');
+            
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    const formData = new FormData(form);
+                    const data = {};
+                    formData.forEach((value, key) => {
+                        data[key] = value;
+                    });
+                    
+                    resultDiv.innerHTML = '<span class="success">✓ Form data captured successfully!</span>';
+                    resultDiv.innerHTML += '<br><span class="info">Amount: ' + data.amount + '</span>';
+                    resultDiv.innerHTML += '<br><span class="info">Category: ' + data.merchant_category + '</span>';
+                    resultDiv.innerHTML += '<br><span class="info">Location: ' + data.location + '</span>';
+                    resultDiv.innerHTML += '<br><span class="info">Time: ' + data.time_of_day + '</span>';
+                });
+            }
+        });
+        
+        // Test 3: API Call Simulation
+        async function testAPICall() {
+            const resultDiv = document.getElementById('test-result-3');
+            resultDiv.innerHTML = '<span class="info">Testing API call...</span>';
+            
+            try {
+                // Simulate API call
+                const testData = {
+                    amount: 100,
+                    merchant_category: 'electronics',
+                    location: 'international',
+                    time_of_day: 'night'
+                };
+                
+                const response = await fetch('/api/detect_fraud', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    resultDiv.innerHTML = '<span class="success">✓ API call successful!</span>';
+                    resultDiv.innerHTML += '<br><span class="info">Response: ' + JSON.stringify(result, null, 2) + '</span>';
+                } else {
+                    resultDiv.innerHTML = '<span class="error">✗ API call failed with status: ' + response.status + '</span>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<span class="error">✗ API call error: ' + error.message + '</span>';
+                resultDiv.innerHTML += '<br><span class="info">Make sure the Flask app is running on http://127.0.0.1:5000</span>';
+            }
+        }
+        
+        // Auto-run DOM test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(testDOMAccess, 100);
+        });
+    </script>
+</body>
+</html> 

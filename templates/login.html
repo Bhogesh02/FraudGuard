@@ -6,24 +6,153 @@
     <title>FraudGuard - Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body style="background-image: url('{{ url_for('static', filename=background_image) }}'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-    <div class="form-container">
-        <h2>Login to FraudGuard</h2>
-        {% if message %}
-            <p class="error-message">{{ message }}</p>
-        {% endif %}
-        <form method="POST" action="/login">
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>FraudGuard</span>
+        </div>
+        
+        <div class="navbar-nav">
+            <a href="/about" class="nav-link">
+                <i class="fas fa-info-circle"></i>
+                About
+            </a>
+            <a href="/team" class="nav-link">
+                <i class="fas fa-users"></i>
+                Team
+            </a>
+        </div>
+        
+        <div class="navbar-nav">
+            <a href="/register" class="btn btn-outline">
+                <i class="fas fa-user-plus"></i>
+                Register
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="form-container">
+            <!-- Login Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Welcome Back
+                    </h2>
+                </div>
+                
+                {% if message %}
+                    <div class="notification error" style="position: static; margin-bottom: 1rem;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ message }}
+                    </div>
+                {% endif %}
+                
+                <form method="POST" action="/login">
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Email Address
+                        </label>
+                        <input type="email" id="email" name="email" required 
+                               class="form-input" placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Password
+                        </label>
+                        <input type="password" id="password" name="password" required 
+                               class="form-input" placeholder="Enter your password">
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Sign In
+                        </button>
+                    </div>
+                </form>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="color: var(--text-secondary);">
+                        Don't have an account? 
+                        <a href="/register" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">
+                            Create one here
+                        </a>
+                    </p>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+            
+            <!-- Features Card -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-star"></i>
+                        Why Choose FraudGuard?
+                    </h3>
+                </div>
+                <div class="dashboard-grid">
+                    <div style="text-align: center; padding: 1rem;">
+                        <i class="fas fa-shield-check" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h4 style="margin-bottom: 0.5rem;">Advanced AI</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">State-of-the-art machine learning for accurate fraud detection</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <i class="fas fa-bolt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h4 style="margin-bottom: 0.5rem;">Real-time Analysis</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Instant results with detailed explanations</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h4 style="margin-bottom: 0.5rem;">Analytics Dashboard</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Comprehensive insights and transaction history</p>
+                    </div>
+                </div>
             </div>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="/register">Register here</a></p>
+        </div>
     </div>
+
+    <!-- Professional Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <p>&copy; 2024 FraudGuard. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/about" class="footer-link">About</a>
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="/support" class="footer-link">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Add form validation
+        const form = document.querySelector('form');
+        const inputs = form.querySelectorAll('input');
+        
+        inputs.forEach(input => {
+            input.addEventListener('change', function() {
+                if (this.checkValidity()) {
+                    this.style.borderColor = 'var(--success-color)';
+                } else {
+                    this.style.borderColor = 'var(--secondary-color)';
+                }
+            });
+        });
+
+        // Add loading state to submit button
+        form.addEventListener('submit', function() {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+            submitBtn.disabled = true;
+        });
+    </script>
 </body>
 </html>

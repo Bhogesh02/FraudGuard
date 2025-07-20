@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - About & Documentation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Enhanced animations and cool effects */
+        .card {
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .stat-card {
+            animation: fadeInScale 0.8s ease-out;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.3);
+        }
+        
+        .feature-highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(22, 163, 74, 0.1));
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .feature-highlight:hover::before {
+            left: 100%;
+        }
+        
+        .feature-highlight:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+        }
+        
+        .tech-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tech-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .tech-card:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.25);
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulseGlow {
+            from {
+                box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
+            }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--success-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>FraudGuard</span>
+        </div>
+        
+        <div class="navbar-nav">
+            <a href="/" class="nav-link">
+                <i class="fas fa-home"></i>
+                Home
+            </a>
+            <a href="/about" class="nav-link">
+                <i class="fas fa-info-circle"></i>
+                About
+            </a>
+            <a href="/team" class="nav-link">
+                <i class="fas fa-users"></i>
+                Team
+            </a>
+            <a href="/login" class="nav-link">
+                <i class="fas fa-sign-in-alt"></i>
+                Login
+            </a>
+        </div>
+        
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="username">Guest</div>
+                <div class="user-role">Visitor</div>
+            </div>
+            <a href="/login" class="btn btn-outline" style="margin-left: 1rem;">
+                <i class="fas fa-sign-in-alt"></i>
+                Login
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- Project Overview -->
+        <div class="card mb-4 pulse-glow">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-shield-alt"></i>
+                    About FraudGuard
+                </h2>
+                <div class="real-time-indicator">
+                    <i class="fas fa-circle"></i>
+                    Advanced AI Protection
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin: 0;">
+                FraudGuard is an advanced credit card fraud detection system that leverages cutting-edge machine learning algorithms to identify potentially fraudulent transactions in real-time. Our system provides comprehensive protection against financial fraud while maintaining user-friendly interfaces and detailed explanations for all detection decisions.
+            </p>
+            
+            <div class="dashboard-grid" style="margin-top: 2rem;">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="stat-number gradient-text">95%+</div>
+                    <div class="stat-label">Detection Accuracy</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="stat-number gradient-text">Real-time</div>
+                    <div class="stat-label">Analysis Speed</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <div class="stat-number gradient-text">Multi-layer</div>
+                    <div class="stat-label">Security Protection</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number gradient-text">User-friendly</div>
+                    <div class="stat-label">Interface Design</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Use -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-play-circle"></i>
+                    How to Use FraudGuard
+                </h2>
+            </div>
+            
+            <div class="analytics-container">
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-list-ol"></i>
+                        Step-by-Step Guide
+                    </h3>
+                    
+                    <div style="padding: 1rem;">
+                        <div class="feature-highlight">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="background: var(--primary-color); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">1</div>
+                                <div>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Access the Application</strong>
+                                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0 0;">Navigate to the FraudGuard web application and log in with your credentials.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-highlight">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="background: var(--primary-color); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">2</div>
+                                <div>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Enter Transaction Details</strong>
+                                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0 0;">Fill out the transaction form with amount, merchant category, location, and time.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-highlight">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="background: var(--primary-color); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">3</div>
+                                <div>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Analyze Transaction</strong>
+                                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0 0;">Click the "Analyze Transaction" button to start the fraud detection process.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-highlight">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="background: var(--primary-color); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">4</div>
+                                <div>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Review Results</strong>
+                                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0 0;">View fraud probability, detailed analysis, and risk factors identified.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-highlight">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="background: var(--primary-color); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">5</div>
+                                <div>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Take Action</strong>
+                                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0 0;">Approve, reject, or flag the transaction based on analysis results.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-cogs"></i>
+                        Key Features
+                    </h3>
+                    
+                    <div style="padding: 1rem;">
+                        <div class="tech-card">
+                            <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">
+                                <i class="fas fa-brain"></i> Advanced ML Algorithms
+                            </h4>
+                            <p style="color: var(--text-secondary); margin: 0;">Random Forest, Gradient Boosting, and Logistic Regression models for accurate fraud detection.</p>
+                        </div>
+                        
+                        <div class="tech-card">
+                            <h4 style="color: var(--success-color); margin-bottom: 0.5rem;">
+                                <i class="fas fa-chart-line"></i> Real-time Analysis
+                            </h4>
+                            <p style="color: var(--text-secondary); margin: 0;">Instant fraud detection results with detailed probability scores and explanations.</p>
+                        </div>
+                        
+                        <div class="tech-card">
+                            <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">
+                                <i class="fas fa-shield-virus"></i> Comprehensive Security
+                            </h4>
+                            <p style="color: var(--text-secondary); margin: 0;">Multiple security layers including authentication, encryption, and secure APIs.</p>
+                        </div>
+                        
+                        <div class="tech-card">
+                            <h4 style="color: var(--warning-color); margin-bottom: 0.5rem;">
+                                <i class="fas fa-mobile-alt"></i> Responsive Design
+                            </h4>
+                            <p style="color: var(--text-secondary); margin: 0;">Works seamlessly across all devices with intuitive user interfaces.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-code"></i>
+                    Technology Stack
+                </h2>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                FraudGuard is built using modern, scalable technologies that ensure reliability, security, and performance.
+            </p>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <div class="stat-number">Python</div>
+                    <div class="stat-label">Core Language</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="stat-number">Flask</div>
+                    <div class="stat-label">Web Framework</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="stat-number">Scikit-learn</div>
+                    <div class="stat-label">Machine Learning</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="stat-number">MongoDB</div>
+                    <div class="stat-label">Database</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fab fa-html5"></i>
+                    </div>
+                    <div class="stat-number">HTML5/CSS3</div>
+                    <div class="stat-label">Frontend</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <div class="stat-number">JavaScript</div>
+                    <div class="stat-label">Interactive Features</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-cogs"></i>
+                    How It Works
+                </h2>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                Our fraud detection system uses a sophisticated multi-stage approach to identify fraudulent transactions.
+            </p>
+            
+            <div class="analytics-container">
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-database"></i>
+                        Data Processing
+                    </h3>
+                    <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                        <li>Transaction data collection and preprocessing</li>
+                        <li>Feature engineering and normalization</li>
+                        <li>Data validation and quality checks</li>
+                        <li>Real-time data transformation</li>
+                    </ul>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="card-title">
+                        <i class="fas fa-brain"></i>
+                        Machine Learning Analysis
+                    </h3>
+                    <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                        <li>Multiple ML models for ensemble prediction</li>
+                        <li>Feature importance analysis</li>
+                        <li>Probability score calculation</li>
+                        <li>Risk factor identification</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="chart-container" style="margin-top: 2rem;">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-pie"></i>
+                    Result Generation
+                </h3>
+                <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                    <li>Fraud probability scoring</li>
+                    <li>Detailed explanation generation</li>
+                    <li>Risk factor breakdown</li>
+                    <li>Actionable recommendations</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-trophy"></i>
+                    Benefits & Impact
+                </h2>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-number">Financial</div>
+                    <div class="stat-label">Protection</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-number">Time</div>
+                    <div class="stat-label">Savings</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-number">Improved</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="stat-number">User</div>
+                    <div class="stat-label">Experience</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

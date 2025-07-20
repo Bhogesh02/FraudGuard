@@ -6,24 +6,267 @@
     <title>FraudGuard - Register</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body style="background-image: url('{{ url_for('static', filename=background_image) }}'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-    <div class="form-container">
-        <h2>Register for FraudGuard</h2>
-        {% if message %}
-            <p class="error-message">{{ message }}</p>
-        {% endif %}
-        <form method="POST" action="/register">
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>FraudGuard</span>
+        </div>
+        
+        <div class="navbar-nav">
+            <a href="/about" class="nav-link">
+                <i class="fas fa-info-circle"></i>
+                About
+            </a>
+            <a href="/team" class="nav-link">
+                <i class="fas fa-users"></i>
+                Team
+            </a>
+        </div>
+        
+        <div class="navbar-nav">
+            <a href="/login" class="btn btn-outline">
+                <i class="fas fa-sign-in-alt"></i>
+                Login
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="form-container">
+            <!-- Register Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-user-plus"></i>
+                        Create Account
+                    </h2>
+                </div>
+                
+                {% if message %}
+                    <div class="notification error" style="position: static; margin-bottom: 1rem;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ message }}
+                    </div>
+                {% endif %}
+                
+                <form method="POST" action="/register" id="registerForm">
+                    <div class="form-group">
+                        <label for="name" class="form-label">
+                            <i class="fas fa-user"></i>
+                            Full Name
+                        </label>
+                        <input type="text" id="name" name="name" required 
+                               class="form-input" placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Email Address
+                        </label>
+                        <input type="email" id="email" name="email" required 
+                               class="form-input" placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country" class="form-label">
+                            <i class="fas fa-globe"></i>
+                            Country
+                        </label>
+                        <select id="country" name="country" required class="form-select">
+                            <option value="">Select your country</option>
+                            <option value="United States">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Germany">Germany</option>
+                            <option value="France">France</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Japan">Japan</option>
+                            <option value="India">India</option>
+                            <option value="Brazil">Brazil</option>
+                            <option value="Mexico">Mexico</option>
+                            <option value="Spain">Spain</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Netherlands">Netherlands</option>
+                            <option value="Sweden">Sweden</option>
+                            <option value="Norway">Norway</option>
+                            <option value="Denmark">Denmark</option>
+                            <option value="Finland">Finland</option>
+                            <option value="Switzerland">Switzerland</option>
+                            <option value="Austria">Austria</option>
+                            <option value="Belgium">Belgium</option>
+                            <option value="Ireland">Ireland</option>
+                            <option value="New Zealand">New Zealand</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="South Korea">South Korea</option>
+                            <option value="China">China</option>
+                            <option value="Russia">Russia</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="Argentina">Argentina</option>
+                            <option value="Chile">Chile</option>
+                            <option value="Colombia">Colombia</option>
+                            <option value="Peru">Peru</option>
+                            <option value="Venezuela">Venezuela</option>
+                            <option value="Uruguay">Uruguay</option>
+                            <option value="Paraguay">Paraguay</option>
+                            <option value="Bolivia">Bolivia</option>
+                            <option value="Ecuador">Ecuador</option>
+                            <option value="Guyana">Guyana</option>
+                            <option value="Suriname">Suriname</option>
+                            <option value="French Guiana">French Guiana</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Password
+                        </label>
+                        <input type="password" id="password" name="password" required 
+                               class="form-input" placeholder="Create a strong password">
+                        <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                            Password must be at least 8 characters long
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm_password" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Confirm Password
+                        </label>
+                        <input type="password" id="confirm_password" name="confirm_password" required 
+                               class="form-input" placeholder="Confirm your password">
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i>
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="color: var(--text-secondary);">
+                        Already have an account? 
+                        <a href="/login" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">
+                            Sign in here
+                        </a>
+                    </p>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+            
+            <!-- Benefits Card -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-gift"></i>
+                        Get Started Today
+                    </h3>
+                </div>
+                <div class="dashboard-grid">
+                    <div style="text-align: center; padding: 1rem;">
+                        <i class="fas fa-rocket" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h4 style="margin-bottom: 0.5rem;">Free Access</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Start detecting fraud immediately with our free tier</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <i class="fas fa-database" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h4 style="margin-bottom: 0.5rem;">Secure Storage</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Your data is encrypted and stored securely</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem;">
+                        <i class="fas fa-headset" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h4 style="margin-bottom: 0.5rem;">24/7 Support</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">Get help whenever you need it</p>
+                    </div>
+                </div>
             </div>
-            <button type="submit">Register</button>
-        </form>
-        <p>Already have an account? <a href="/login">Login here</a></p>
+        </div>
     </div>
+
+    <!-- Professional Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <p>&copy; 2024 FraudGuard. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/about" class="footer-link">About</a>
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="/support" class="footer-link">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Form validation
+        const form = document.getElementById('registerForm');
+        const inputs = form.querySelectorAll('input, select');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        
+        // Real-time validation
+        inputs.forEach(input => {
+            input.addEventListener('change', function() {
+                validateField(this);
+            });
+        });
+        
+        function validateField(field) {
+            if (field.checkValidity()) {
+                field.style.borderColor = 'var(--success-color)';
+            } else {
+                field.style.borderColor = 'var(--secondary-color)';
+            }
+        }
+        
+        // Password confirmation validation
+        confirmPassword.addEventListener('input', function() {
+            if (this.value === password.value) {
+                this.style.borderColor = 'var(--success-color)';
+            } else {
+                this.style.borderColor = 'var(--secondary-color)';
+            }
+        });
+        
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            if (password.value !== confirmPassword.value) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            if (password.value.length < 8) {
+                e.preventDefault();
+                alert('Password must be at least 8 characters long!');
+                return;
+            }
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            submitBtn.disabled = true;
+        });
+        
+        // Show notification function
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                ${message}
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

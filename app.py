@@ -187,18 +187,52 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        name = request.form.get('name', '')
+        email = request.form.get('email', '')
+        country = request.form.get('country', '')
+        password = request.form.get('password', '')
+        confirm_password = request.form.get('confirm_password', '')
+        
+        # Basic validation
+        if not all([name, email, country, password, confirm_password]):
+            return render_template('register.html', 
+                                message='All fields are required.', 
+                                background_image="fraud_detection_bg.jpg")
+        
+        if password != confirm_password:
+            return render_template('register.html', 
+                                message='Passwords do not match.', 
+                                background_image="fraud_detection_bg.jpg")
+        
+        if len(password) < 6:
+            return render_template('register.html', 
+                                message='Password must be at least 6 characters long.', 
+                                background_image="fraud_detection_bg.jpg")
+        
         # TODO: Implement MongoDB user registration here
         # For now, we'll just redirect to login
         return redirect(url_for('login'))
     return render_template('register.html', background_image="fraud_detection_bg.jpg")
 
+@app.route('/about')
+def about():
+    return render_template('about.html', background_image="fraud_detection_bg.jpg")
+
+@app.route('/team')
+def team():
+    return render_template('team.html', background_image="fraud_detection_bg.jpg")
+
+@app.route('/user-details')
+def user_details():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return render_template('user_details.html', background_image="fraud_detection_bg.jpg", username="Demo User")
+
 @app.route('/detect', methods=['GET'])
 def detect_page():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-    return render_template('detect_user_friendly.html')
+    return render_template('detect_user_friendly.html', username="Demo User")
 
 @app.route('/logout')
 def logout():

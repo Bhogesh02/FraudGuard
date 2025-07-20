@@ -3,157 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FraudGuard - Detect Fraud (User Friendly)</title>
+    <title>FraudGuard - Fraud Detection</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        /* Add some basic styling for explanations for better readability */
-        .result-section ul {
-            list-style-type: disc;
-            margin-left: 20px;
-            padding-left: 0;
-            text-align: left;
-        }
-        .result-section li {
-            margin-bottom: 5px;
-        }
-        .fraud {
-            background-color: #ffe6e6; /* Light red background for fraud */
-            border-left: 5px solid #cc0000; /* Red border */
-            padding: 15px;
-            border-radius: 5px;
-        }
-        .legitimate {
-            background-color: #e6ffe6; /* Light green background for legitimate */
-            border-left: 5px solid #009900; /* Green border */
-            padding: 15px;
-            border-radius: 5px;
-        }
-        .error {
-            background-color: #fff0e6; /* Light orange for errors */
-            border-left: 5px solid #ff6600; /* Orange border */
-            padding: 15px;
-            border-radius: 5px;
-        }
-    </style>
 </head>
 <body>
+    <!-- Modern Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>FraudGuard</span>
+        </div>
+        
+        <div class="navbar-nav">
+            <a href="/dashboard" class="nav-link">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            <a href="/detect" class="nav-link active">
+                <i class="fas fa-search"></i>
+                Detect Fraud
+            </a>
+            <a href="/analytics" class="nav-link">
+                <i class="fas fa-chart-line"></i>
+                Analytics
+            </a>
+            <a href="/user-details" class="nav-link">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+        </div>
+        
+        <div class="user-profile">
+            <div class="user-avatar">
+                {{ username[0].upper() if username else 'U' }}
+            </div>
+            <div class="user-info">
+                <div class="username">{{ username }}</div>
+                <div class="user-role">Security Analyst</div>
+            </div>
+            <a href="/logout" class="btn btn-outline" style="margin-left: 1rem;">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </nav>
+
     <div class="main-container">
-        <header>
-            <h1>FraudGuard - Transaction Analysis</h1>
-            <nav>
-                <a href="/logout">Logout</a>
-            </nav>
-        </header>
-
-        <div class="content-section">
-            <h2>Enter Transaction Details</h2>
-            <p class="note">
-                Enter details about your transaction in user-friendly language. Our system will analyze it for potential fraud.
+        <!-- Header Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-search"></i>
+                    Transaction Analysis
+                </h2>
+                <div class="real-time-indicator">
+                    <i class="fas fa-circle"></i>
+                    AI-Powered Detection
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin: 0;">
+                Enter transaction details below. Our advanced AI system will analyze the patterns and provide real-time fraud detection results.
             </p>
-            <form id="fraudDetectionForm">
-                <div class="input-grid">
-                    <div class="input-group">
-                        <label for="amount">Transaction Amount:</label>
-                        <input type="number" id="amount" name="amount" step="0.01" required placeholder="e.g., 100.50">
-                    </div>
+        </div>
 
-                    <div class="input-group">
-                        <label for="merchant_category">Merchant Category:</label>
-                        <select id="merchant_category" name="merchant_category" required>
-                            <option value="">--Select Category--</option>
-                            <option value="groceries">Groceries</option>
-                            <option value="online shopping">Online Shopping</option>
-                            <option value="travel">Travel</option>
-                            <option value="electronics">Electronics</option>
-                            <option value="fashion">Fashion</option>
-                            <option value="food & dining">Food & Dining</option>
-                            <option value="healthcare">Healthcare</option>
-                            <option value="utilities">Utilities</option>
-                            <option value="transportation">Transportation</option>
-                            <option value="entertainment">Entertainment</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="location">Transaction Location:</label>
-                        <select id="location" name="location" required>
-                            <option value="">--Select Location Type--</option>
-                            <option value="same city">Same City (Normal)</option>
-                            <option value="different city">Different City / State</option>
-                            <option value="international">International (Unusual)</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="time_of_day">Time of Day:</label>
-                        <select id="time_of_day" name="time_of_day" required>
-                            <option value="">--Select Time--</option>
-                            <option value="early morning">Early Morning (1 AM - 6 AM)</option>
-                            <option value="morning">Morning (6 AM - 12 PM)</option>
-                            <option value="afternoon">Afternoon (12 PM - 6 PM)</option>
-                            <option value="evening">Evening (6 PM - 10 PM)</option>
-                            <option value="night">Night (10 PM - 1 AM)</option>
-                        </select>
-                    </div>
+        <!-- Transaction Form -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-credit-card"></i>
+                    Transaction Details
+                </h3>
+            </div>
+            
+            <form id="fraudDetectionForm" class="transaction-form">
+                <div class="form-group">
+                    <label for="amount" class="form-label">
+                        <i class="fas fa-dollar-sign"></i>
+                        Transaction Amount
+                    </label>
+                    <input type="number" id="amount" name="amount" step="0.01" required 
+                           class="form-input" placeholder="Enter amount (e.g., 100.50)">
                 </div>
-                <button type="submit">Detect Fraud</button>
+
+                <div class="form-group">
+                    <label for="merchant_category" class="form-label">
+                        <i class="fas fa-store"></i>
+                        Merchant Category
+                    </label>
+                    <select id="merchant_category" name="merchant_category" required class="form-select">
+                        <option value="">Select Category</option>
+                        <option value="groceries">Groceries</option>
+                        <option value="online shopping">Online Shopping</option>
+                        <option value="travel">Travel</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="food & dining">Food & Dining</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="utilities">Utilities</option>
+                        <option value="transportation">Transportation</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="location" class="form-label">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Transaction Location
+                    </label>
+                    <select id="location" name="location" required class="form-select">
+                        <option value="">Select Location Type</option>
+                        <option value="same city">Same City (Normal)</option>
+                        <option value="different city">Different City / State</option>
+                        <option value="international">International (Unusual)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="time_of_day" class="form-label">
+                        <i class="fas fa-clock"></i>
+                        Time of Day
+                    </label>
+                    <select id="time_of_day" name="time_of_day" required class="form-select">
+                        <option value="">Select Time</option>
+                        <option value="early morning">Early Morning (1 AM - 6 AM)</option>
+                        <option value="morning">Morning (6 AM - 12 PM)</option>
+                        <option value="afternoon">Afternoon (12 PM - 6 PM)</option>
+                        <option value="evening">Evening (6 PM - 10 PM)</option>
+                        <option value="night">Night (10 PM - 1 AM)</option>
+                    </select>
+                </div>
             </form>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="submit" form="fraudDetectionForm" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    Analyze Transaction
+                </button>
+            </div>
+        </div>
 
-            <div id="result" class="result-section">
-                </div>
+        <!-- Results Section -->
+        <div id="result" class="fraud-result" style="display: none;">
+            <!-- Results will be populated here -->
+        </div>
+
+        <!-- Recent Analysis -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-history"></i>
+                    Recent Analysis
+                </h3>
+            </div>
+            <div id="recentAnalysis">
+                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">
+                    No recent analysis yet. Start by analyzing a transaction above.
+                </p>
+            </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('fraudDetectionForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value; // Store as string for category, location, time
-            });
-            data['amount'] = parseFloat(data['amount']); // Convert amount to number
-
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('fraudDetectionForm');
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = 'Detecting fraud...';
-            resultDiv.className = 'result-section'; // Reset class for styling
-
-            try {
-                const response = await fetch('/api/detect_fraud', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    let messageHtml = `<h3>${result.message}</h3>`;
-                    if (result.explanations && result.explanations.length > 0) {
-                        messageHtml += `<ul>${result.explanations.map(exp => `<li>${exp}</li>`).join('')}</ul>`;
-                    }
-
-                    if (result.is_fraud) {
-                        resultDiv.innerHTML = messageHtml;
-                        resultDiv.classList.add('fraud');
-                    } else {
-                        resultDiv.innerHTML = messageHtml;
-                        resultDiv.classList.add('legitimate');
-                    }
-                } else {
-                    resultDiv.innerHTML = `<h3>Error:</h3><p>${result.error || 'Something went wrong.'}</p>`;
-                    resultDiv.classList.add('error');
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<h3>Network Error:</h3><p>Could not connect to the server. ${error.message}</p>`;
-                resultDiv.classList.add('error');
+            
+            if (!form) {
+                console.error('Form not found: fraudDetectionForm');
+                return;
             }
+            
+            if (!resultDiv) {
+                console.error('Result div not found: result');
+                return;
+            }
+            
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+                data['amount'] = parseFloat(data['amount']);
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                
+                // Show loading state
+                if (submitBtn) {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+                    submitBtn.disabled = true;
+                }
+                
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<div class="loading">Analyzing transaction patterns...</div>';
+                resultDiv.className = 'fraud-result';
+
+                try {
+                    const response = await fetch('/api/detect_fraud', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        let messageHtml = `
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-${result.is_fraud ? 'exclamation-triangle' : 'check-circle'}"></i>
+                                    Analysis Complete
+                                </h3>
+                            </div>
+                            <div style="padding: 1rem;">
+                                <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                                    ${result.is_fraud ? '⚠️ Potential Fraud Detected' : '✅ Transaction Legitimate'}
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <strong>Confidence:</strong> ${(result.fraud_probability * 100).toFixed(2)}%
+                                </div>
+                        `;
+                        
+                        if (result.explanations && result.explanations.length > 0) {
+                            messageHtml += '<div style="margin-top: 1rem;"><strong>Analysis Details:</strong><ul style="margin-top: 0.5rem; padding-left: 1.5rem;">';
+                            result.explanations.forEach(exp => {
+                                messageHtml += `<li style="margin-bottom: 0.5rem;">${exp}</li>`;
+                            });
+                            messageHtml += '</ul></div>';
+                        }
+                        
+                        messageHtml += '</div>';
+
+                        if (result.is_fraud) {
+                            resultDiv.innerHTML = messageHtml;
+                            resultDiv.classList.add('fraud');
+                        } else {
+                            resultDiv.innerHTML = messageHtml;
+                            resultDiv.classList.add('legitimate');
+                        }
+
+                        // Add to recent analysis
+                        addToRecentAnalysis(data, result);
+                        
+                        // Show notification
+                        showNotification(
+                            result.is_fraud ? 'Fraud pattern detected!' : 'Transaction appears legitimate.',
+                            result.is_fraud ? 'error' : 'success'
+                        );
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    Analysis Error
+                                </h3>
+                            </div>
+                            <div style="padding: 1rem;">
+                                <p>${result.error || 'Something went wrong during analysis.'}</p>
+                            </div>
+                        `;
+                        resultDiv.classList.add('error');
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Network Error
+                            </h3>
+                        </div>
+                        <div style="padding: 1rem;">
+                            <p>Could not connect to the server. Please check your connection and try again.</p>
+                        </div>
+                    `;
+                    resultDiv.classList.add('error');
+                } finally {
+                    // Reset button
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '<i class="fas fa-search"></i> Analyze Transaction';
+                        submitBtn.disabled = false;
+                    }
+                }
+            });
+
+            // Add form validation
+            const inputs = form.querySelectorAll('input, select');
+            
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    if (this.checkValidity()) {
+                        this.style.borderColor = 'var(--success-color)';
+                    } else {
+                        this.style.borderColor = 'var(--secondary-color)';
+                    }
+                });
+            });
         });
+
+        function addToRecentAnalysis(data, result) {
+            const recentDiv = document.getElementById('recentAnalysis');
+            if (!recentDiv) return;
+            
+            const analysisItem = document.createElement('div');
+            analysisItem.style.cssText = `
+                padding: 1rem;
+                border-bottom: 1px solid var(--border-color);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            `;
+            
+            analysisItem.innerHTML = `
+                <div>
+                    <div style="font-weight: 600;">$${data.amount} - ${data.merchant_category}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary);">${data.location} • ${data.time_of_day}</div>
+                </div>
+                <div>
+                    <span class="real-time-indicator" style="background: ${result.is_fraud ? 'rgba(220, 38, 38, 0.1)' : 'rgba(22, 163, 74, 0.1)'}; border-color: ${result.is_fraud ? 'var(--secondary-color)' : 'var(--success-color)'}; color: ${result.is_fraud ? 'var(--secondary-color)' : 'var(--success-color)'};">
+                        ${result.is_fraud ? 'Fraud' : 'Legitimate'}
+                    </span>
+                </div>
+            `;
+            
+            // Remove the "no analysis" message if it exists
+            const noAnalysisMsg = recentDiv.querySelector('p');
+            if (noAnalysisMsg) {
+                noAnalysisMsg.remove();
+            }
+            
+            // Add new analysis at the top
+            recentDiv.insertBefore(analysisItem, recentDiv.firstChild);
+            
+            // Keep only last 5 analyses
+            const items = recentDiv.querySelectorAll('div');
+            if (items.length > 5) {
+                items[items.length - 1].remove();
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                ${message}
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>FraudGuard</span>
+        </div>
+        
+        <div class="navbar-nav">
+            <a href="/dashboard" class="nav-link">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            <a href="/detect" class="nav-link">
+                <i class="fas fa-search"></i>
+                Detect Fraud
+            </a>
+            <a href="/analytics" class="nav-link">
+                <i class="fas fa-chart-line"></i>
+                Analytics
+            </a>
+            <a href="/user-details" class="nav-link">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+        </div>
+        
+        <div class="user-profile">
+            <div class="user-avatar">
+                {{ username[0].upper() if username else 'U' }}
+            </div>
+            <div class="user-info">
+                <div class="username">{{ username }}</div>
+                <div class="user-role">Security Analyst</div>
+            </div>
+            <a href="/logout" class="btn btn-outline" style="margin-left: 1rem;">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- Settings Header -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-cog"></i>
+                    Account Settings
+                </h2>
+            </div>
+            <p style="color: var(--text-secondary); margin: 0;">
+                Manage your account preferences and security settings.
+            </p>
+        </div>
+
+        <!-- Profile Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-user-edit"></i>
+                    Profile Information
+                </h3>
+            </div>
+            
+            <form class="form-container" style="max-width: none;">
+                <div class="dashboard-grid">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            Full Name
+                        </label>
+                        <input type="text" class="form-input" value="{{ username }}" placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Email Address
+                        </label>
+                        <input type="email" class="form-input" value="user@example.com" placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-globe"></i>
+                            Country
+                        </label>
+                        <select class="form-select">
+                            <option value="United States">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-phone"></i>
+                            Phone Number
+                        </label>
+                        <input type="tel" class="form-input" placeholder="Enter your phone number">
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Security Settings
+                </h3>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="stat-number">Enabled</div>
+                    <div class="stat-label">Two-Factor Authentication</div>
+                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">
+                        <i class="fas fa-cog"></i>
+                        Configure
+                    </button>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="stat-number">Strong</div>
+                    <div class="stat-label">Password Strength</div>
+                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">
+                        <i class="fas fa-edit"></i>
+                        Change Password
+                    </button>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="stat-number">30 Days</div>
+                    <div class="stat-label">Session Timeout</div>
+                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">
+                        <i class="fas fa-clock"></i>
+                        Adjust
+                    </button>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="stat-number">On</div>
+                    <div class="stat-label">Security Notifications</div>
+                    <button class="btn btn-outline" style="margin-top: 1rem; width: 100%;">
+                        <i class="fas fa-sliders-h"></i>
+                        Configure
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Preferences -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-bell"></i>
+                    Notification Preferences
+                </h3>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div style="padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-primary);">Email Notifications</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Receive updates via email</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-primary);">Fraud Alerts</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Immediate fraud notifications</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-primary);">Weekly Reports</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Summary reports every week</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-primary);">System Updates</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Product and security updates</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Actions -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Account Actions
+                </h3>
+            </div>
+            
+            <div class="dashboard-grid">
+                <button class="btn btn-outline" style="width: 100%; padding: 1.5rem;">
+                    <i class="fas fa-download"></i>
+                    Export Data
+                </button>
+                <button class="btn btn-outline" style="width: 100%; padding: 1.5rem;">
+                    <i class="fas fa-trash"></i>
+                    Delete Account
+                </button>
+                <button class="btn btn-danger" style="width: 100%; padding: 1.5rem;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout All Sessions
+                </button>
+                <button class="btn btn-outline" style="width: 100%; padding: 1.5rem;">
+                    <i class="fas fa-question-circle"></i>
+                    Get Help
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <p>&copy; 2024 FraudGuard. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/about" class="footer-link">About</a>
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="/support" class="footer-link">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-color);
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+
+    <script>
+        // Add interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle form submissions
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showNotification('Settings saved successfully!', 'success');
+                });
+            });
+            
+            // Handle button clicks
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (this.textContent.includes('Delete Account')) {
+                        e.preventDefault();
+                        if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                            showNotification('Account deletion requested', 'error');
+                        }
+                    } else if (this.textContent.includes('Logout All Sessions')) {
+                        e.preventDefault();
+                        if (confirm('Are you sure you want to logout from all devices?')) {
+                            showNotification('All sessions logged out', 'success');
+                        }
+                    }
+                });
+            });
+            
+            // Handle toggle switches
+            const toggles = document.querySelectorAll('input[type="checkbox"]');
+            toggles.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    const setting = this.closest('div').querySelector('div').textContent;
+                    showNotification(`${setting} ${this.checked ? 'enabled' : 'disabled'}`, 'success');
+                });
+            });
+            
+            // Notification system
+            function showNotification(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    ${message}
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html> 
