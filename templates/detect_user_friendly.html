@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - Detect Fraud (User Friendly)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Add some basic styling for explanations for better readability */
+        .result-section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            padding-left: 0;
+            text-align: left;
+        }
+        .result-section li {
+            margin-bottom: 5px;
+        }
+        .fraud {
+            background-color: #ffe6e6; /* Light red background for fraud */
+            border-left: 5px solid #cc0000; /* Red border */
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .legitimate {
+            background-color: #e6ffe6; /* Light green background for legitimate */
+            border-left: 5px solid #009900; /* Green border */
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .error {
+            background-color: #fff0e6; /* Light orange for errors */
+            border-left: 5px solid #ff6600; /* Orange border */
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <h1>FraudGuard - Transaction Analysis</h1>
+            <nav>
+                <a href="/logout">Logout</a>
+            </nav>
+        </header>
+
+        <div class="content-section">
+            <h2>Enter Transaction Details</h2>
+            <p class="note">
+                Enter details about your transaction in user-friendly language. Our system will analyze it for potential fraud.
+            </p>
+            <form id="fraudDetectionForm">
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="amount">Transaction Amount:</label>
+                        <input type="number" id="amount" name="amount" step="0.01" required placeholder="e.g., 100.50">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="merchant_category">Merchant Category:</label>
+                        <select id="merchant_category" name="merchant_category" required>
+                            <option value="">--Select Category--</option>
+                            <option value="groceries">Groceries</option>
+                            <option value="online shopping">Online Shopping</option>
+                            <option value="travel">Travel</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="food & dining">Food & Dining</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="utilities">Utilities</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="location">Transaction Location:</label>
+                        <select id="location" name="location" required>
+                            <option value="">--Select Location Type--</option>
+                            <option value="same city">Same City (Normal)</option>
+                            <option value="different city">Different City / State</option>
+                            <option value="international">International (Unusual)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="time_of_day">Time of Day:</label>
+                        <select id="time_of_day" name="time_of_day" required>
+                            <option value="">--Select Time--</option>
+                            <option value="early morning">Early Morning (1 AM - 6 AM)</option>
+                            <option value="morning">Morning (6 AM - 12 PM)</option>
+                            <option value="afternoon">Afternoon (12 PM - 6 PM)</option>
+                            <option value="evening">Evening (6 PM - 10 PM)</option>
+                            <option value="night">Night (10 PM - 1 AM)</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit">Detect Fraud</button>
+            </form>
+
+            <div id="result" class="result-section">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('fraudDetectionForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value; // Store as string for category, location, time
+            });
+            data['amount'] = parseFloat(data['amount']); // Convert amount to number
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Detecting fraud...';
+            resultDiv.className = 'result-section'; // Reset class for styling
+
+            try {
+                const response = await fetch('/api/detect_fraud', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    let messageHtml = `<h3>${result.message}</h3>`;
+                    if (result.explanations && result.explanations.length > 0) {
+                        messageHtml += `<ul>${result.explanations.map(exp => `<li>${exp}</li>`).join('')}</ul>`;
+                    }
+
+                    if (result.is_fraud) {
+                        resultDiv.innerHTML = messageHtml;
+                        resultDiv.classList.add('fraud');
+                    } else {
+                        resultDiv.innerHTML = messageHtml;
+                        resultDiv.classList.add('legitimate');
+                    }
+                } else {
+                    resultDiv.innerHTML = `<h3>Error:</h3><p>${result.error || 'Something went wrong.'}</p>`;
+                    resultDiv.classList.add('error');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<h3>Network Error:</h3><p>Could not connect to the server. ${error.message}</p>`;
+                resultDiv.classList.add('error');
+            }
+        });
+    </script>
+</body>
+</html>

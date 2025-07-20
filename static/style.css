@@ -1,0 +1,177 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a; /* Dark background */
+    color: #f0f0f0; /* Light text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('fraud_detection_bg.jpg'); /* Default background for login/register */
+    background-size: cover;
+    background-position: center;
+    flex-direction: column;
+}
+
+/* Specific styling for the detect page to avoid background image conflict */
+.main-container {
+    background-image: none; /* Remove background image from main content area */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+    width: 90%;
+    max-width: 1000px; /* Adjust as needed */
+    margin: 20px auto;
+}
+
+header {
+    background-color: #333;
+    padding: 15px 20px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    color: #ff3333; /* Red accent */
+}
+
+nav a {
+    color: #f0f0f0;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #ff3333;
+}
+
+.form-container {
+    background-color: rgba(0, 0, 0, 0.8); /* Darker, semi-transparent for forms */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h2 {
+    color: #ff6666; /* Lighter red for headings */
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ddd;
+}
+
+.input-group input[type="email"],
+.input-group input[type="password"],
+.input-group input[type="number"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #333;
+    color: #f0f0f0;
+    font-size: 16px;
+}
+
+button {
+    background-color: #ff3333; /* Red button */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+p {
+    margin-top: 20px;
+    color: #ccc;
+}
+
+p a {
+    color: #ff6666;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #ff0000;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.content-section {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Adjust column width as needed */
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.result-section {
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.result-section.fraud {
+    background-color: rgba(255, 0, 0, 0.2);
+    border: 1px solid #ff0000;
+    color: #ff0000;
+}
+
+.result-section.legitimate {
+    background-color: rgba(0, 255, 0, 0.1);
+    border: 1px solid #00ff00;
+    color: #00ff00;
+}
+
+.result-section.error {
+    background-color: rgba(255, 165, 0, 0.2);
+    border: 1px solid #ffa500;
+    color: #ffa500;
+}
+
+.note {
+    background-color: rgba(255, 255, 0, 0.1); /* Light yellow tint */
+    border-left: 4px solid yellow;
+    padding: 10px;
+    margin-bottom: 20px;
+    color: #ffffcc;
+    font-size: 0.9em;
+}

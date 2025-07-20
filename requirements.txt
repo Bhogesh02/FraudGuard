@@ -1,0 +1,9 @@
+Flask
+Flask-Bcrypt
+scikit-learn
+pandas
+imbalanced-learn
+joblib
+numpy
+pymongo
+flask-pymongo
