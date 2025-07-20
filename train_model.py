@@ -25,8 +25,8 @@ def main():
     print("=" * 70)
     
     # Check if required files exist
-    if not os.path.exists('fraud_model.py'):
-        print("❌ Error: fraud_model.py not found!")
+    if not os.path.exists('src/models/fraud_model.py'):
+        print("❌ Error: src/models/fraud_model.py not found!")
         print("Please make sure you're in the correct directory.")
         return
     
@@ -47,7 +47,7 @@ def main():
         print()
         
         # Run the fraud_model.py script
-        result = subprocess.run([sys.executable, 'fraud_model.py'], 
+        result = subprocess.run([sys.executable, 'src/models/fraud_model.py'], 
                               capture_output=False, text=True)
         
         if result.returncode == 0:
