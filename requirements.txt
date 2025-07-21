@@ -8,3 +8,4 @@ numpy
 pymongo
 flask-pymongo
 gunicorn
+python-dotenv
