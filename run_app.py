@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 # Import the main app from controllers
 from src.controllers.app_mongodb import app
+
 if __name__ == '__main__':
     print("🚀 Starting FraudGuard Application...")
     print("📁 Using new optimized folder structure")
@@ -23,4 +24,4 @@ if __name__ == '__main__':
     print()
     
     # Run the Flask app
-    app.run(debug=True, host='127.0.0.1', port=5000) 
+    app.run(debug=True, host='0.0.0.0', port=5000) 
