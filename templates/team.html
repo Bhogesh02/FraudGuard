@@ -222,6 +222,99 @@
             transform: translateX(5px);
             box-shadow: 0 15px 35px rgba(37, 99, 235, 0.2);
         }
+
+        /* Mutchi Divya special animation */
+        .divya-animate {
+            animation: divyaBounceGlow 2s infinite alternate;
+            box-shadow: 0 0 20px 2px rgba(22, 163, 74, 0.15);
+        }
+        .md-animated-avatar {
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-color), var(--success-color));
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+            overflow: hidden;
+        }
+        .md-face-icon {
+            font-size: 2.6rem;
+            color: #fffbe7;
+            z-index: 1;
+            animation: mdFaceSmile 2.5s infinite alternate;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        .md-initials-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(37,99,235,0.85);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 2px 10px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.18);
+            z-index: 2;
+            letter-spacing: 1px;
+            border: 2px solid #fff;
+            animation: mdBadgePop 2.5s infinite alternate;
+        }
+        @keyframes mdFaceSmile {
+            0% { transform: scale(1) rotate(0deg); color: #fffbe7; }
+            20% { transform: scale(1.1) rotate(-5deg); color: #fffbe7; }
+            40% { transform: scale(1.2) rotate(5deg); color: #ff69b4; }
+            60% { transform: scale(1.1) rotate(-5deg); color: #fffbe7; }
+            80% { transform: scale(1) rotate(0deg); color: #fffbe7; }
+            100% { transform: scale(1) rotate(0deg); color: #fffbe7; }
+        }
+        @keyframes mdBadgePop {
+            0% { transform: scale(1); background: rgba(37,99,235,0.85); }
+            50% { transform: scale(1.15); background: #ff69b4; color: #fff; }
+            100% { transform: scale(1); background: rgba(37,99,235,0.85); }
+        }
+        .value-extra {
+            color: #fff;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            border-left: 5px solid var(--primary-color);
+            padding: 0.7rem 1rem;
+            background: rgba(37,99,235,0.10);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            border-radius: 8px;
+        }
+        .value-extra.innovation {
+            border-left-color: #ffd700;
+            background: rgba(255,215,0,0.10);
+        }
+        .value-extra.security {
+            border-left-color: #2563eb;
+            background: rgba(37,99,235,0.10);
+        }
+        .value-extra.collaboration {
+            border-left-color: #16a34a;
+            background: rgba(22,163,74,0.10);
+        }
+        .value-extra.excellence {
+            border-left-color: #ffb300;
+            background: rgba(255,179,0,0.10);
+        }
+        .value-extra .fa {
+            font-size: 1.2rem;
+            opacity: 0.85;
+        }
     </style>
 </head>
 <body>
@@ -336,8 +429,13 @@
                 </div>
                 
                 <!-- Mutchi Divya -->
-                <div class="team-member-card">
-                    <div class="member-avatar">MD</div>
+                <div class="team-member-card divya-animate">
+                    <div class="member-avatar md-animated-avatar" style="position: relative;">
+                        <span class="md-face-icon">
+                            <i class="fas fa-face-smile-wink"></i>
+                        </span>
+                        <span class="md-initials-badge">MD</span>
+                    </div>
                     <div class="member-name">Mutchi Divya</div>
                     <div class="member-role">Frontend Developer</div>
                     <div class="member-skills">
@@ -381,6 +479,7 @@
                     <p style="color: var(--text-secondary);">
                         We constantly push the boundaries of what's possible in fraud detection, leveraging cutting-edge AI and machine learning technologies to stay ahead of evolving threats.
                     </p>
+                    <p class="value-extra innovation"><i class="fas fa-bolt"></i>We foster a culture where curiosity is celebrated, and bold ideas are encouraged—transforming challenges into opportunities for breakthrough solutions.</p>
                 </div>
                 
                 <div class="chart-container">
@@ -391,6 +490,7 @@
                     <p style="color: var(--text-secondary);">
                         Every decision we make prioritizes the security and privacy of our users. We implement industry-leading security practices to protect sensitive data.
                     </p>
+                    <p class="value-extra security"><i class="fas fa-lock"></i>Our commitment to security is unwavering, with continuous monitoring, regular audits, and proactive risk management to ensure trust at every level.</p>
                 </div>
                 
                 <div class="chart-container">
@@ -401,6 +501,7 @@
                     <p style="color: var(--text-secondary);">
                         We believe in the power of teamwork. Our diverse team brings together expertise from various domains to create comprehensive solutions.
                     </p>
+                    <p class="value-extra collaboration"><i class="fas fa-handshake"></i>We thrive on open communication, mutual respect, and shared goals, knowing that the best results come from working together and learning from each other.</p>
                 </div>
                 
                 <div class="chart-container">
@@ -411,6 +512,7 @@
                     <p style="color: var(--text-secondary);">
                         We strive for excellence in everything we do, from code quality to user experience, ensuring our solutions meet the highest standards.
                     </p>
+                    <p class="value-extra excellence"><i class="fas fa-trophy"></i>We are relentless in our pursuit of improvement, embracing feedback and innovation to deliver outstanding results that exceed expectations.</p>
                 </div>
             </div>
         </div>
