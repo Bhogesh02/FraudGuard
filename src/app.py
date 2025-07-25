@@ -242,54 +242,54 @@ def logout():
 
 
 # --- API Endpoint for Fraud Detection ---
-@app.route('/api/detect_fraud', methods=['POST'])
-def detect_fraud_api():
-    if not session.get('logged_in'):
-        return jsonify({'error': 'Unauthorized, please log in'}), 401
+# @app.route('/api/detect_fraud', methods=['POST'])
+# def detect_fraud_api():
+#     if not session.get('logged_in'):
+#         return jsonify({'error': 'Unauthorized, please log in'}), 401
         
-    if ML_MODEL is None or AMOUNT_SCALER is None or MODEL_FEATURE_COLUMNS is None:
-        return jsonify({'error': 'Machine learning model assets not loaded. Please contact support.'}), 500
+#     if ML_MODEL is None or AMOUNT_SCALER is None or MODEL_FEATURE_COLUMNS is None:
+#         return jsonify({'error': 'Machine learning model assets not loaded. Please contact support.'}), 500
 
-    data = request.json # This will contain user_amount, merchant_category, location, time_of_day
+#     data = request.json # This will contain user_amount, merchant_category, location, time_of_day
     
-    try:
-        # Convert user-friendly input into model-expected numerical features
-        processed_input_df = _map_user_input_to_features(data)
+#     try:
+#         # Convert user-friendly input into model-expected numerical features
+#         processed_input_df = _map_user_input_to_features(data)
         
-        # Scale the 'Amount' feature using the loaded scaler
-        if 'Amount' in processed_input_df.columns:
-            processed_input_df['Amount'] = AMOUNT_SCALER.transform(processed_input_df[['Amount']])
-        else:
-            return jsonify({'error': 'Amount feature missing after processing user input.'}), 400
+#         # Scale the 'Amount' feature using the loaded scaler
+#         if 'Amount' in processed_input_df.columns:
+#             processed_input_df['Amount'] = AMOUNT_SCALER.transform(processed_input_df[['Amount']])
+#         else:
+#             return jsonify({'error': 'Amount feature missing after processing user input.'}), 400
 
-        # Predict probability of fraud (class 1)
-        fraud_probability = ML_MODEL.predict_proba(processed_input_df)[:, 1][0]
+#         # Predict probability of fraud (class 1)
+#         fraud_probability = ML_MODEL.predict_proba(processed_input_df)[:, 1][0]
 
-        # --- ADJUSTABLE FRAUD THRESHOLD ---
-        # IMPORTANT: Set this based on the 'Optimal Threshold' you found from running fraud_model.py.
-        # If your optimal threshold was, for example, 0.1234, you can set it here.
-        # This determines the sensitivity of your fraud detection. Lower means more fraud detected,
-        # but also potentially more false positives.
-        FRAUD_THRESHOLD =  0.8100 # <--- UPDATE THIS VALUE after running fraud_model.py!
+#         # --- ADJUSTABLE FRAUD THRESHOLD ---
+#         # IMPORTANT: Set this based on the 'Optimal Threshold' you found from running fraud_model.py.
+#         # If your optimal threshold was, for example, 0.1234, you can set it here.
+#         # This determines the sensitivity of your fraud detection. Lower means more fraud detected,
+#         # but also potentially more false positives.
+#         FRAUD_THRESHOLD =  0.8100 # <--- UPDATE THIS VALUE after running fraud_model.py!
 
-        is_fraud = bool(fraud_probability >= FRAUD_THRESHOLD)
+#         is_fraud = bool(fraud_probability >= FRAUD_THRESHOLD)
         
-        # Generate user-friendly explanations
-        explanations = generate_fraud_explanation(data, fraud_probability, is_fraud)
+#         # Generate user-friendly explanations
+#         explanations = generate_fraud_explanation(data, fraud_probability, is_fraud)
 
-        return jsonify({
-            'is_fraud': is_fraud,
-            'fraud_probability': float(fraud_probability),
-            'message': 'Fraud detected! Please review this transaction.' if is_fraud else 'Transaction appears legitimate.',
-            'explanations': explanations
-        })
-    except ValueError as ve:
-        return jsonify({'error': f'Invalid input data: {ve}'}), 400
-    except KeyError as ke:
-        return jsonify({'error': f'Missing expected data key: {ke}'}), 400
-    except Exception as e:
-        print(f"Error during fraud detection: {e}") # Log the full error
-        return jsonify({'error': f'An unexpected error occurred during fraud detection. Details: {e}'}), 500
+#         return jsonify({
+#             'is_fraud': is_fraud,
+#             'fraud_probability': float(fraud_probability),
+#             'message': 'Fraud detected! Please review this transaction.' if is_fraud else 'Transaction appears legitimate.',
+#             'explanations': explanations
+#         })
+#     except ValueError as ve:
+#         return jsonify({'error': f'Invalid input data: {ve}'}), 400
+#     except KeyError as ke:
+#         return jsonify({'error': f'Missing expected data key: {ke}'}), 400
+#     except Exception as e:
+#         print(f"Error during fraud detection: {e}") # Log the full error
+#         return jsonify({'error': f'An unexpected error occurred during fraud detection. Details: {e}'}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

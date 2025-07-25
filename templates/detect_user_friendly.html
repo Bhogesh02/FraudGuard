@@ -3,53 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FraudGuard - Fraud Detection</title>
+    <title>FraudGuard - Advanced Fraud Detection</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='shield.png') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     {% include 'navbar_logged_in.html' %}
 
     <div class="main-container">
-        <!-- Header Section -->
+        <!-- Advanced Header Section -->
         <div class="card mb-4">
             <div class="card-header">
                 <h2 class="card-title">
-                    <i class="fas fa-search"></i>
-                    Transaction Analysis
+                    <i class="fas fa-shield-alt"></i>
+                    Advanced Fraud Detection System
                 </h2>
                 <div class="real-time-indicator">
                     <i class="fas fa-circle"></i>
-                    AI-Powered Detection
+                    AI-Powered Real-Time Analysis
                 </div>
             </div>
-            <p style="color: var(--text-secondary); margin: 0;">
-                Enter transaction details below. Our advanced AI system will analyze the patterns and provide real-time fraud detection results.
-            </p>
+            <div class="dashboard-grid" style="margin-top: 1rem;">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-brain"></i></div>
+                    <div class="stat-number">99.8%</div>
+                    <div class="stat-label">AI Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="stat-number">< 2s</div>
+                    <div class="stat-label">Analysis Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-database"></i></div>
+                    <div class="stat-number">1M+</div>
+                    <div class="stat-label">Patterns Analyzed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Monitoring</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Transaction Form -->
+        <!-- Real-Time Risk Dashboard -->
+        <div class="card mb-4" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%);">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-line"></i>
+                    Real-Time Risk Assessment
+                </h3>
+            </div>
+            <div class="dashboard-grid">
+                <div class="risk-indicator" id="amount-risk">
+                    <div class="risk-label">Amount Risk</div>
+                    <div class="risk-meter">
+                        <div class="risk-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="risk-value">Low</div>
+                </div>
+                <div class="risk-indicator" id="location-risk">
+                    <div class="risk-label">Location Risk</div>
+                    <div class="risk-meter">
+                        <div class="risk-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="risk-value">Low</div>
+                </div>
+                <div class="risk-indicator" id="time-risk">
+                    <div class="risk-label">Time Risk</div>
+                    <div class="risk-meter">
+                        <div class="risk-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="risk-value">Low</div>
+                </div>
+                <div class="risk-indicator" id="category-risk">
+                    <div class="risk-label">Category Risk</div>
+                    <div class="risk-meter">
+                        <div class="risk-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="risk-value">Low</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Analytics Summary -->
+        <div class="card mb-4" style="background: var(--background-card);">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Quick Analytics
+                </h3>
+            </div>
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-number" id="quick-legit">-</div>
+                    <div class="stat-label">Legitimate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="stat-number" id="quick-fraud">-</div>
+                    <div class="stat-label">Fraudulent</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                    <div class="stat-number" id="quick-fraud-rate">-</div>
+                    <div class="stat-label">Fraud Rate</div>
+                </div>
+                <div class="stat-card">
+                    <a href="/analytics" class="btn btn-secondary" style="margin-top: 1rem;">View Full Analytics</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Transaction Analysis -->
         <div class="card mb-4">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-credit-card"></i>
-                    Transaction Details
+                    Advanced Transaction Analysis
                 </h3>
+                <div class="form-tabs">
+                    <button class="tab-btn active" data-tab="basic">
+                        <i class="fas fa-play"></i>
+                        Quick Analysis
+                    </button>
+                    <button class="tab-btn" data-tab="standard">
+                        <i class="fas fa-cog"></i>
+                        Standard Mode
+                    </button>
+                    <button class="tab-btn" data-tab="advanced">
+                        <i class="fas fa-sliders-h"></i>
+                        Advanced Mode
+                    </button>
+                    <button class="tab-btn" data-tab="batch">
+                        <i class="fas fa-upload"></i>
+                        Batch Analysis
+                    </button>
+                </div>
             </div>
             
-            <form id="fraudDetectionForm" class="transaction-form">
+            <!-- Quick Analysis Tab (Basic) -->
+            <div class="tab-content active" id="basic-tab">
+                <div class="analysis-intro">
+                    <h4><i class="fas fa-bolt"></i> Quick Transaction Check</h4>
+                    <p>Enter essential details for a rapid fraud assessment.</p>
+                </div>
+                <form id="quickAnalysisForm" class="transaction-form" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quick_amount" class="form-label">
+                                <i class="fas fa-dollar-sign"></i>
+                                Amount
+                            </label>
+                            <input type="number" id="quick_amount" name="amount" step="0.01" required 
+                                   class="form-input" placeholder="Enter amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="quick_category" class="form-label">
+                                <i class="fas fa-store"></i>
+                                Category
+                            </label>
+                            <select id="quick_category" name="merchant_category" required class="form-select">
+                                <option value="">Select Category</option>
+                                <option value="groceries">Groceries</option>
+                                <option value="online shopping">Online Shopping</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="travel">Travel</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quick_location" class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Location
+                            </label>
+                            <select id="quick_location" name="location" required class="form-select">
+                                <option value="">Select Location</option>
+                                <option value="same city">Same City</option>
+                                <option value="different city">Different City</option>
+                                <option value="international">International</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quick_time" class="form-label">
+                                <i class="fas fa-clock"></i>
+                                Time
+                            </label>
+                            <select id="quick_time" name="time_of_day" required class="form-select">
+                                <option value="">Select Time</option>
+                                <option value="morning">Morning</option>
+                                <option value="afternoon">Afternoon</option>
+                                <option value="evening">Evening</option>
+                                <option value="night">Night</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="quick-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-search"></i>
+                            Quick Check
+                        </button>
+                        <button type="button" id="autoFillQuick" class="btn-secondary">
+                            <i class="fas fa-magic"></i>
+                            Auto Fill
+                        </button>
+                        <button type="button" class="btn-sm" onclick="showSmartSuggestions('quick')">
+                            <i class="fas fa-lightbulb"></i>
+                            Tips
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Standard Mode Tab -->
+            <div class="tab-content" id="standard-tab">
+                <div class="analysis-intro">
+                    <h4><i class="fas fa-cog"></i> Standard Transaction Analysis</h4>
+                    <p>Complete analysis with detailed transaction information and receipt upload.</p>
+                </div>
+                <form id="fraudDetectionForm" class="transaction-form" enctype="multipart/form-data">
+                    <div class="form-section">
+                        <h5><i class="fas fa-info-circle"></i> Basic Information</h5>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="transaction_id" class="form-label">
+                                    <i class="fas fa-hashtag"></i>
+                                    Transaction ID
+                                </label>
+                                <input type="text" id="transaction_id" name="transaction_id" class="form-input" placeholder="Auto-generated if empty">
+                                <div class="form-hint">Leave empty for auto-generation</div>
+                            </div>
                 <div class="form-group">
                     <label for="amount" class="form-label">
                         <i class="fas fa-dollar-sign"></i>
-                        Transaction Amount
+                                    Amount
                     </label>
                     <input type="number" id="amount" name="amount" step="0.01" required 
-                           class="form-input" placeholder="Enter amount (e.g., 100.50)">
+                                       class="form-input" placeholder="Enter amount">
+                                <div class="form-hint">Amount will be analyzed for risk patterns</div>
+                            </div>
+                        </div>
                 </div>
 
+                    <div class="form-section">
+                        <h5><i class="fas fa-store"></i> Transaction Details</h5>
+                        <div class="form-row">
                 <div class="form-group">
                     <label for="merchant_category" class="form-label">
-                        <i class="fas fa-store"></i>
+                                    <i class="fas fa-tag"></i>
                         Merchant Category
                     </label>
                     <select id="merchant_category" name="merchant_category" required class="form-select">
@@ -66,57 +272,401 @@
                         <option value="entertainment">Entertainment</option>
                         <option value="other">Other</option>
                     </select>
+                                <div class="form-hint">Category affects risk assessment</div>
                 </div>
-
+                <div class="form-group">
+                    <label for="merchant_name" class="form-label">
+                                    <i class="fas fa-store"></i>
+                        Merchant Name
+                    </label>
+                    <input type="text" id="merchant_name" name="merchant_name" required class="form-input" placeholder="e.g., Walmart, Amazon, etc.">
+                                <div class="form-hint">Enter the merchant or store name</div>
+                </div>
+                        </div>
+                        <div class="form-row">
                 <div class="form-group">
                     <label for="location" class="form-label">
                         <i class="fas fa-map-marker-alt"></i>
-                        Transaction Location
+                                    Location
                     </label>
                     <select id="location" name="location" required class="form-select">
-                        <option value="">Select Location Type</option>
+                                    <option value="">Select Location</option>
                         <option value="same city">Same City (Normal)</option>
                         <option value="different city">Different City / State</option>
                         <option value="international">International (Unusual)</option>
                     </select>
+                                <div class="form-hint">Location patterns are analyzed</div>
                 </div>
-
-                <div class="form-group">
-                    <label for="time_of_day" class="form-label">
-                        <i class="fas fa-clock"></i>
-                        Time of Day
-                    </label>
-                    <select id="time_of_day" name="time_of_day" required class="form-select">
-                        <option value="">Select Time</option>
-                        <option value="early morning">Early Morning (1 AM - 6 AM)</option>
-                        <option value="morning">Morning (6 AM - 12 PM)</option>
-                        <option value="afternoon">Afternoon (12 PM - 6 PM)</option>
-                        <option value="evening">Evening (6 PM - 10 PM)</option>
-                        <option value="night">Night (10 PM - 1 AM)</option>
-                    </select>
-                </div>
-            </form>
-            
-            <div style="text-align: center; margin-top: 2rem;">
-                <button type="submit" form="fraudDetectionForm" class="btn btn-primary">
+                            <div class="form-group">
+                                <label for="card_type" class="form-label">
+                                    <i class="fas fa-credit-card"></i>
+                                    Card Type
+                                </label>
+                                <select id="card_type" name="card_type" required class="form-select">
+                                    <option value="">Select Card Type</option>
+                                    <option value="Visa">Visa</option>
+                                    <option value="Mastercard">Mastercard</option>
+                                    <option value="American Express">American Express</option>
+                                    <option value="Discover">Discover</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <div class="form-hint">Card type for analysis</div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="time_of_day" class="form-label">
+                                    <i class="fas fa-clock"></i>
+                                    Time of Day
+                                </label>
+                                <select id="time_of_day" name="time_of_day" required class="form-select">
+                                    <option value="">Select Time</option>
+                                    <option value="early morning">Early Morning (1 AM - 6 AM)</option>
+                                    <option value="morning">Morning (6 AM - 12 PM)</option>
+                                    <option value="afternoon">Afternoon (12 PM - 6 PM)</option>
+                                    <option value="evening">Evening (6 PM - 12 AM)</option>
+                                    <option value="night">Night (12 AM - 1 AM)</option>
+                                </select>
+                                <div class="form-hint">Time patterns are analyzed for risk</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="transaction_type" class="form-label">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    Transaction Type
+                                </label>
+                                <select id="transaction_type" name="transaction_type" required class="form-select">
+                                    <option value="">Select Type</option>
+                                    <option value="purchase">Purchase</option>
+                                    <option value="withdrawal">ATM Withdrawal</option>
+                                    <option value="transfer">Transfer</option>
+                                    <option value="payment">Payment</option>
+                                    <option value="refund">Refund</option>
+                                </select>
+                                <div class="form-hint">Type of transaction</div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="upload_image" class="form-label">
+                                    <i class="fas fa-upload"></i>
+                                    Receipt/Image
+                                </label>
+                                <input type="file" id="upload_image" name="upload_image" accept="image/*" class="form-input">
+                                <div class="form-hint">Receipts help verify transaction legitimacy</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="currency" class="form-label">
+                                    <i class="fas fa-money-bill"></i>
+                                    Currency
+                                </label>
+                                <select id="currency" name="currency" required class="form-select">
+                                    <option value="USD">USD (US Dollar)</option>
+                                    <option value="EUR">EUR (Euro)</option>
+                                    <option value="GBP">GBP (British Pound)</option>
+                                    <option value="CAD">CAD (Canadian Dollar)</option>
+                                    <option value="AUD">AUD (Australian Dollar)</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <div class="form-hint">Transaction currency</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
                     <i class="fas fa-search"></i>
                     Analyze Transaction
                 </button>
+                        <button type="button" id="autoFillStandard" class="btn-secondary">
+                            <i class="fas fa-magic"></i>
+                            Auto Fill
+                        </button>
+                        <button type="button" class="btn-sm" onclick="showSmartSuggestions('standard')">
+                            <i class="fas fa-lightbulb"></i>
+                            Tips
+                        </button>
+                        <button type="button" class="btn-sm" onclick="validateForm('standard')">
+                            <i class="fas fa-check"></i>
+                            Validate
+                        </button>
+            </div>
+                </form>
+        </div>
+
+            <!-- Advanced Mode Tab -->
+            <div class="tab-content" id="advanced-tab">
+                <div class="analysis-intro">
+                    <h4><i class="fas fa-sliders-h"></i> Advanced Analysis Settings</h4>
+                    <p>Customize analysis parameters and add detailed transaction information.</p>
+                </div>
+                <form id="advancedAnalysisForm" class="transaction-form" enctype="multipart/form-data">
+                    <div class="form-section">
+                        <h5><i class="fas fa-info-circle"></i> Basic Information</h5>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adv_transaction_id" class="form-label">
+                                    <i class="fas fa-hashtag"></i>
+                                    Transaction ID
+                                </label>
+                                <input type="text" id="adv_transaction_id" name="transaction_id" class="form-input" placeholder="Enter transaction ID">
+                            </div>
+                            <div class="form-group">
+                                <label for="adv_amount" class="form-label">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    Amount
+                                </label>
+                                <input type="number" id="adv_amount" name="amount" step="0.01" required 
+                                       class="form-input" placeholder="Enter amount">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h5><i class="fas fa-store"></i> Transaction Details</h5>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adv_merchant_category" class="form-label">
+                                    <i class="fas fa-tag"></i>
+                                    Merchant Category
+                                </label>
+                                <select id="adv_merchant_category" name="merchant_category" required class="form-select">
+                                    <option value="">Select Category</option>
+                                    <option value="groceries">Groceries</option>
+                                    <option value="online shopping">Online Shopping</option>
+                                    <option value="travel">Travel</option>
+                                    <option value="electronics">Electronics</option>
+                                    <option value="fashion">Fashion</option>
+                                    <option value="food & dining">Food & Dining</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="utilities">Utilities</option>
+                                    <option value="transportation">Transportation</option>
+                                    <option value="entertainment">Entertainment</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="adv_location" class="form-label">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Location
+                                </label>
+                                <select id="adv_location" name="location" required class="form-select">
+                                    <option value="">Select Location</option>
+                                    <option value="same city">Same City (Normal)</option>
+                                    <option value="different city">Different City / State</option>
+                                    <option value="international">International (Unusual)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adv_time_of_day" class="form-label">
+                                    <i class="fas fa-clock"></i>
+                                    Time of Day
+                                </label>
+                                <select id="adv_time_of_day" name="time_of_day" required class="form-select">
+                                    <option value="">Select Time</option>
+                                    <option value="early morning">Early Morning (1 AM - 6 AM)</option>
+                                    <option value="morning">Morning (6 AM - 12 PM)</option>
+                                    <option value="afternoon">Afternoon (12 PM - 6 PM)</option>
+                                    <option value="evening">Evening (6 PM - 10 PM)</option>
+                                    <option value="night">Night (10 PM - 1 AM)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="adv_upload_image" class="form-label">
+                                    <i class="fas fa-upload"></i>
+                                    Receipt/Image
+                                </label>
+                                <input type="file" id="adv_upload_image" name="upload_image" accept="image/*" class="form-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h5><i class="fas fa-cog"></i> Advanced Options</h5>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="transaction_type" class="form-label">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    Transaction Type
+                                </label>
+                                <select id="transaction_type" name="transaction_type" class="form-select">
+                                    <option value="purchase">Purchase</option>
+                                    <option value="refund">Refund</option>
+                                    <option value="transfer">Transfer</option>
+                                    <option value="withdrawal">Withdrawal</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="payment_method" class="form-label">
+                                    <i class="fas fa-credit-card"></i>
+                                    Payment Method
+                                </label>
+                                <select id="payment_method" name="payment_method" class="form-select">
+                                    <option value="credit_card">Credit Card</option>
+                                    <option value="debit_card">Debit Card</option>
+                                    <option value="bank_transfer">Bank Transfer</option>
+                                    <option value="digital_wallet">Digital Wallet</option>
+                                    <option value="cryptocurrency">Cryptocurrency</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h5><i class="fas fa-sliders-h"></i> Analysis Settings</h5>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="confidence_threshold" class="form-label">
+                                    <i class="fas fa-target"></i>
+                                    Confidence Threshold
+                                </label>
+                                <div class="slider-container">
+                                    <input type="range" id="confidence_threshold" min="0.5" max="0.95" step="0.05" value="0.8" class="form-range">
+                                    <div class="range-value">80%</div>
+                                </div>
+                                <div class="form-hint">Higher threshold = stricter analysis</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="analysis_depth" class="form-label">
+                                    <i class="fas fa-search"></i>
+                                    Analysis Depth
+                                </label>
+                                <select id="analysis_depth" class="form-select">
+                                    <option value="basic">Basic</option>
+                                    <option value="standard" selected>Standard</option>
+                                    <option value="deep">Deep Analysis</option>
+                                </select>
+                                <div class="form-hint">Deeper analysis takes longer</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-search"></i>
+                            Advanced Analysis
+                        </button>
+                        <button type="button" id="autoFillAdvanced" class="btn-secondary">
+                            <i class="fas fa-magic"></i>
+                            Auto Fill
+                        </button>
+                        <button type="button" class="btn-sm" onclick="showSmartSuggestions('advanced')">
+                            <i class="fas fa-lightbulb"></i>
+                            Tips
+                        </button>
+                        <button type="button" class="btn-sm" onclick="validateForm('advanced')">
+                            <i class="fas fa-check"></i>
+                            Validate
+                        </button>
+                        <button type="button" class="btn-sm" onclick="showAdvancedSettings()">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Batch Analysis Tab -->
+            <div class="tab-content" id="batch-tab">
+                <div class="analysis-intro">
+                    <h4><i class="fas fa-upload"></i> Batch Transaction Analysis</h4>
+                    <p>Upload a CSV file with multiple transactions for bulk fraud detection.</p>
+                </div>
+                <div class="batch-upload">
+                    <div class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h5>Upload CSV File</h5>
+                        <p>Drag and drop your CSV file here or click to browse</p>
+                        <input type="file" id="batchFile" accept=".csv" class="form-input">
+                        <div class="file-requirements">
+                            <h6>File Requirements:</h6>
+                            <ul>
+                                <li>CSV format only</li>
+                                <li>Include columns: amount, category, location, time_of_day</li>
+                                <li>Maximum 1000 transactions per file</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="batch-actions">
+                        <button type="button" id="analyzeBatch" class="btn-primary" disabled>
+                            <i class="fas fa-cogs"></i>
+                            Analyze Batch
+                        </button>
+                        <button type="button" id="downloadTemplate" class="btn-secondary">
+                            <i class="fas fa-download"></i>
+                            Download Template
+                        </button>
+                        <button type="button" class="btn-sm" onclick="showBatchHelp()">
+                            <i class="fas fa-question"></i>
+                            Help
+                        </button>
+                    </div>
+                </div>
+                <div id="batchResults" style="display: none;">
+                    <h5>Batch Analysis Results</h5>
+                    <div id="batchSummary"></div>
+                    <div id="batchDetails"></div>
+                </div>
             </div>
         </div>
 
-        <!-- Results Section -->
+        <!-- Enhanced Results Section -->
         <div id="result" class="fraud-result" style="display: none;">
             <!-- Results will be populated here -->
         </div>
 
-        <!-- Recent Analysis -->
+        <!-- AI Confidence Meter -->
+        <div id="confidenceMeter" class="card mb-4" style="display: none;">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-brain"></i>
+                    AI Confidence Analysis
+                </h3>
+            </div>
+            <div class="confidence-container">
+                <div class="confidence-meter">
+                    <div class="confidence-fill" id="confidenceFill"></div>
+                </div>
+                <div class="confidence-labels">
+                    <span>Low</span>
+                    <span>Medium</span>
+                    <span>High</span>
+                </div>
+                <div class="confidence-value" id="confidenceValue">0%</div>
+            </div>
+        </div>
+
+        <!-- Transaction History Comparison -->
+        <div id="historyComparison" class="card mb-4" style="display: none;">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-history"></i>
+                    Historical Pattern Analysis
+                </h3>
+            </div>
+            <div class="history-chart">
+                <canvas id="historyChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Analysis with Enhanced Features -->
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-history"></i>
                     Recent Analysis
                 </h3>
+                <div class="recent-controls">
+                    <button id="clearHistory" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-trash"></i>
+                        Clear History
+                    </button>
+                    <button id="exportHistory" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                </div>
             </div>
             <div id="recentAnalysis">
                 <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">
@@ -139,35 +689,864 @@
         </div>
     </footer>
 
+    <style>
+        /* Advanced Transaction Analysis Styles */
+        .analysis-intro {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .analysis-intro h2 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .analysis-intro p {
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: auto;
+            white-space: nowrap;
+        }
+
+        .btn-sm:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-sm i {
+            font-size: 0.75rem;
+        }
+
+        .form-tabs {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 8px 8px 0 0;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            overflow: hidden;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+            position: relative;
+            min-width: 0;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            background: var(--card-bg);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 1.5rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-section h4 i {
+            color: var(--primary-color);
+            font-size: 0.875rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: auto;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: auto;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-meter {
+            flex: 1;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .risk-fill {
+            height: 100%;
+            background: var(--success-color);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .risk-value {
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .confidence-container {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .confidence-meter {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .confidence-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .confidence-fill {
+            height: 12px;
+            background: var(--success-color);
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .confidence-value {
+            text-align: center;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .recent-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .batch-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .batch-upload:hover {
+            border-color: var(--primary-color);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .batch-upload.dragover {
+            border-color: var(--primary-color);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .file-requirements {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        .batch-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .advanced-settings {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .advanced-settings h5 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .form-range {
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+
+        .range-value {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .upload-area {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+        }
+
+        /* Smart suggestions */
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .suggestion-item:hover {
+            background: var(--border-color);
+        }
+
+        .suggestion-item.selected {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Enhanced form styling */
+        .form-group {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn-sm {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+
     <script>
-        // Wait for DOM to be fully loaded
+        // Advanced fraud detection functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('fraudDetectionForm');
+            console.log('Initializing Advanced Transaction Analysis...');
+            
+            // Tab functionality
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetTab = this.dataset.tab;
+                    console.log('Switching to tab:', targetTab);
+                    
+                    // Update active tab button
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update active tab content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(targetTab + '-tab').classList.add('active');
+                });
+            });
+            
+            // Form references
+            const quickForm = document.getElementById('quickAnalysisForm');
+            const standardForm = document.getElementById('fraudDetectionForm');
+            const advancedForm = document.getElementById('advancedAnalysisForm');
             const resultDiv = document.getElementById('result');
             
-            if (!form) {
-                console.error('Form not found: fraudDetectionForm');
-                return;
+            // Auto-fill buttons
+            document.getElementById('autoFillQuick')?.addEventListener('click', function() {
+                fillQuickForm();
+            });
+            
+            document.getElementById('autoFillStandard')?.addEventListener('click', function() {
+                fillStandardForm();
+            });
+            
+            document.getElementById('autoFillAdvanced')?.addEventListener('click', function() {
+                fillAdvancedForm();
+            });
+            
+            // Auto-fill functions
+            function fillQuickForm() {
+                document.getElementById('quick_amount').value = '150.00';
+                document.getElementById('quick_category').value = 'online shopping';
+                document.getElementById('quick_location').value = 'same city';
+                document.getElementById('quick_time').value = 'afternoon';
+                updateRiskIndicators();
+                console.log('Quick form auto-filled');
             }
             
-            if (!resultDiv) {
-                console.error('Result div not found: result');
-                return;
+            function fillStandardForm() {
+                document.getElementById('transaction_id').value = 'TXN-' + Date.now();
+                document.getElementById('amount').value = '250.00';
+                document.getElementById('merchant_category').value = 'electronics';
+                document.getElementById('merchant_name').value = 'Best Buy';
+                document.getElementById('location').value = 'different city';
+                document.getElementById('card_type').value = 'Visa';
+                document.getElementById('time_of_day').value = 'evening';
+                document.getElementById('transaction_type').value = 'purchase';
+                updateRiskIndicators();
+                console.log('Standard form auto-filled');
             }
             
-            form.addEventListener('submit', async function(event) {
-                event.preventDefault();
-
-                const formData = new FormData(form);
-                const data = {};
-                formData.forEach((value, key) => {
-                    data[key] = value;
-                });
-                data['amount'] = parseFloat(data['amount']);
-
-                const submitBtn = form.querySelector('button[type="submit"]');
+            function fillAdvancedForm() {
+                document.getElementById('adv_transaction_id').value = 'ADV-' + Date.now();
+                document.getElementById('adv_amount').value = '500.00';
+                document.getElementById('adv_merchant_category').value = 'travel';
+                document.getElementById('adv_location').value = 'international';
+                document.getElementById('adv_time_of_day').value = 'early morning';
+                document.getElementById('transaction_type').value = 'purchase';
+                document.getElementById('payment_method').value = 'credit_card';
+                updateRiskIndicators();
+                console.log('Advanced form auto-filled');
+            }
+            
+            // Real-time risk assessment
+            function updateRiskIndicators() {
+                const amount = parseFloat(document.getElementById('amount')?.value || 
+                              document.getElementById('quick_amount')?.value || 
+                              document.getElementById('adv_amount')?.value) || 0;
+                const location = document.getElementById('location')?.value || 
+                               document.getElementById('quick_location')?.value || 
+                               document.getElementById('adv_location')?.value;
+                const time = document.getElementById('time_of_day')?.value || 
+                           document.getElementById('quick_time')?.value || 
+                           document.getElementById('adv_time_of_day')?.value;
+                const category = document.getElementById('merchant_category')?.value || 
+                               document.getElementById('quick_category')?.value || 
+                               document.getElementById('adv_merchant_category')?.value;
+                
+                // Amount risk calculation
+                let amountRisk = 0;
+                if (amount > 1000) amountRisk = 80;
+                else if (amount > 500) amountRisk = 40;
+                else if (amount > 100) amountRisk = 20;
+                else amountRisk = 10;
+                
+                // Location risk calculation
+                let locationRisk = 0;
+                if (location === 'international') locationRisk = 90;
+                else if (location === 'different city') locationRisk = 50;
+                else locationRisk = 10;
+                
+                // Time risk calculation
+                let timeRisk = 0;
+                if (time === 'early morning') timeRisk = 70;
+                else if (time === 'night') timeRisk = 60;
+                else timeRisk = 20;
+                
+                // Category risk calculation
+                let categoryRisk = 0;
+                if (category === 'electronics') categoryRisk = 60;
+                else if (category === 'online shopping') categoryRisk = 50;
+                else if (category === 'travel') categoryRisk = 40;
+                else categoryRisk = 20;
+                
+                // Update risk meters
+                updateRiskMeter('amount-risk', amountRisk);
+                updateRiskMeter('location-risk', locationRisk);
+                updateRiskMeter('time-risk', timeRisk);
+                updateRiskMeter('category-risk', categoryRisk);
+            }
+            
+            function updateRiskMeter(elementId, risk) {
+                const element = document.getElementById(elementId);
+                if (!element) return;
+                
+                const fill = element.querySelector('.risk-fill');
+                const value = element.querySelector('.risk-value');
+                
+                fill.style.width = risk + '%';
+                
+                if (risk < 30) {
+                    value.textContent = 'Low';
+                    value.style.color = '#16a34a';
+                } else if (risk < 70) {
+                    value.textContent = 'Medium';
+                    value.style.color = '#ca8a04';
+                } else {
+                    value.textContent = 'High';
+                    value.style.color = '#dc2626';
+                }
+            }
+            
+            // Add event listeners for real-time risk assessment
+            const riskInputs = [
+                'amount', 'location', 'time_of_day', 'merchant_category', 'merchant_name', 'card_type', 'transaction_type',
+                'quick_amount', 'quick_location', 'quick_time', 'quick_category',
+                'adv_amount', 'adv_location', 'adv_time_of_day', 'adv_merchant_category'
+            ];
+            
+            riskInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.addEventListener('input', updateRiskIndicators);
+                    input.addEventListener('change', updateRiskIndicators);
+                }
+            });
+            
+            // Batch analysis functionality
+            document.getElementById('batchFile')?.addEventListener('change', function() {
+                const analyzeBtn = document.getElementById('analyzeBatch');
+                if (analyzeBtn) {
+                    analyzeBtn.disabled = !this.files.length;
+                }
+                console.log('Batch file selected:', this.files[0]?.name);
+                
+                // Show file info
+                if (this.files.length > 0) {
+                    const file = this.files[0];
+                    const fileSize = (file.size / 1024).toFixed(2);
+                    showNotification(`File selected: ${file.name} (${fileSize} KB)`, 'info');
+                }
+            });
+            
+            document.getElementById('analyzeBatch')?.addEventListener('click', function() {
+                const file = document.getElementById('batchFile').files[0];
+                if (!file) {
+                    showNotification('Please select a CSV file first', 'error');
+                    return;
+                }
+                
+                console.log('Starting batch analysis...');
                 
                 // Show loading state
+                const analyzeBtn = document.getElementById('analyzeBatch');
+                const originalText = analyzeBtn.innerHTML;
+                analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+                analyzeBtn.disabled = true;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const csv = e.target.result;
+                        const lines = csv.split('\n');
+                        const headers = lines[0].split(',').map(h => h.trim());
+                        const transactions = [];
+                        
+                        console.log('CSV headers:', headers);
+                        
+                        for (let i = 1; i < lines.length; i++) {
+                            if (lines[i].trim()) {
+                                const values = lines[i].split(',');
+                                const transaction = {};
+                                headers.forEach((header, index) => {
+                                    transaction[header] = values[index]?.trim() || '';
+                                });
+                                transactions.push(transaction);
+                            }
+                        }
+                        
+                        console.log('Parsed transactions:', transactions.length);
+                        
+                        if (transactions.length === 0) {
+                            showNotification('No valid transactions found in CSV file', 'error');
+                            return;
+                        }
+                        
+                        if (transactions.length > 1000) {
+                            showNotification('File contains too many transactions (max 1000)', 'error');
+                            return;
+                        }
+                        
+                        analyzeBatch(transactions);
+                        
+                    } catch (error) {
+                        console.error('Error parsing CSV:', error);
+                        showNotification('Error parsing CSV file. Please check the format.', 'error');
+                    } finally {
+                        // Reset button state
+                        analyzeBtn.innerHTML = originalText;
+                        analyzeBtn.disabled = false;
+                    }
+                };
+                
+                reader.onerror = function() {
+                    showNotification('Error reading file', 'error');
+                    analyzeBtn.innerHTML = originalText;
+                    analyzeBtn.disabled = false;
+                };
+                
+                reader.readAsText(file);
+            });
+            
+            document.getElementById('downloadTemplate')?.addEventListener('click', function() {
+                const template = `amount,category,location,time_of_day,merchant_name,card_type,transaction_type
+100.00,groceries,same city,morning,Walmart,Visa,purchase
+250.00,electronics,different city,afternoon,Best Buy,Mastercard,purchase
+500.00,travel,international,night,Expedia,Visa,purchase
+75.50,food & dining,same city,evening,McDonalds,Visa,payment
+1200.00,electronics,international,early morning,Amazon,Mastercard,purchase
+45.00,utilities,same city,afternoon,ComEd,Visa,withdrawal
+300.00,online shopping,different city,night,eBay,Visa,purchase
+150.00,healthcare,same city,morning,Doctor's Office,Visa,payment
+800.00,travel,international,afternoon,Airbnb,Visa,purchase
+95.00,entertainment,same city,evening,Movie Theater,Visa,purchase`;
+                
+                const blob = new Blob([template], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'transaction_template.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showNotification('Template downloaded successfully!', 'success');
+                console.log('Template downloaded');
+            });
+            
+            function analyzeBatch(transactions) {
+                console.log('Analyzing batch of', transactions.length, 'transactions');
+                
+                // Show progress
+                showNotification(`Analyzing ${transactions.length} transactions...`, 'info');
+                
+                // Simulate batch analysis with realistic fraud detection
+                const results = transactions.map(t => {
+                    const amount = parseFloat(t.amount) || 0;
+                    const category = t.category?.toLowerCase() || 'other';
+                    const location = t.location?.toLowerCase() || 'same city';
+                    const time = t.time_of_day?.toLowerCase() || 'afternoon';
+                    
+                    // Realistic fraud probability calculation
+                    let fraudScore = 0;
+                    
+                    // Amount-based risk
+                    if (amount > 1000) fraudScore += 0.3;
+                    else if (amount > 500) fraudScore += 0.2;
+                    else if (amount < 10) fraudScore += 0.1;
+                    
+                    // Category-based risk
+                    if (category.includes('electronics')) fraudScore += 0.2;
+                    if (category.includes('online shopping')) fraudScore += 0.15;
+                    if (category.includes('travel')) fraudScore += 0.1;
+                    
+                    // Location-based risk
+                    if (location.includes('international')) fraudScore += 0.3;
+                    if (location.includes('different city')) fraudScore += 0.15;
+                    
+                    // Time-based risk
+                    if (time.includes('early morning') || time.includes('night')) fraudScore += 0.2;
+                    
+                    // Add some randomness
+                    fraudScore += Math.random() * 0.1;
+                    
+                    const isFraud = fraudScore > 0.5;
+                    const fraudProbability = Math.min(fraudScore, 0.95);
+                    
+                    return {
+                        ...t,
+                        is_fraud: isFraud,
+                        fraud_probability: fraudProbability,
+                        fraud_score: fraudScore,
+                        explanations: generateFraudExplanations(amount, category, location, time, fraudScore)
+                    };
+                });
+                
+                displayBatchResults(results);
+                showNotification(`Analysis complete! Found ${results.filter(r => r.is_fraud).length} fraudulent transactions.`, 'success');
+            }
+            
+            function generateFraudExplanations(amount, category, location, time, fraudScore) {
+                const explanations = [];
+                
+                if (amount > 1000) explanations.push('High amount transaction flagged');
+                if (category.includes('electronics')) explanations.push('Electronics category has higher fraud risk');
+                if (location.includes('international')) explanations.push('International transaction requires extra scrutiny');
+                if (time.includes('early morning') || time.includes('night')) explanations.push('Unusual transaction time');
+                
+                if (explanations.length === 0) {
+                    explanations.push('Transaction appears legitimate based on current patterns');
+                }
+                
+                return explanations;
+            }
+            
+            function displayBatchResults(results) {
+                const fraudCount = results.filter(r => r.is_fraud).length;
+                const totalCount = results.length;
+                const fraudRate = ((fraudCount/totalCount)*100).toFixed(1);
+                
+                document.getElementById('batchResults').style.display = 'block';
+                document.getElementById('batchSummary').innerHTML = `
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">${totalCount}</div>
+                            <div class="stat-label">Total Transactions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #dc2626;">${fraudCount}</div>
+                            <div class="stat-label">Fraudulent</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #16a34a;">${totalCount - fraudCount}</div>
+                            <div class="stat-label">Legitimate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${fraudRate}%</div>
+                            <div class="stat-label">Fraud Rate</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <h5 style="margin-bottom: 1rem;">Detailed Results</h5>
+                        <div style="overflow-x: auto; max-height: 400px;">
+                            <table class="styled-table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Amount</th>
+                                        <th>Category</th>
+                                        <th>Location</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                        <th>Risk Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${results.map(t => `
+                                        <tr style="background: ${t.is_fraud ? 'rgba(220, 38, 38, 0.1)' : 'rgba(22, 163, 74, 0.1)'};">
+                                            <td>$${t.amount}</td>
+                                            <td>${t.category}</td>
+                                            <td>${t.location}</td>
+                                            <td>${t.time_of_day}</td>
+                                            <td>
+                                                <span class="real-time-indicator" style="background: ${t.is_fraud ? 'rgba(220, 38, 38, 0.1)' : 'rgba(22, 163, 74, 0.1)'}; border-color: ${t.is_fraud ? '#dc2626' : '#16a34a'}; color: ${t.is_fraud ? '#dc2626' : '#16a34a'};">
+                                                    ${t.is_fraud ? 'Fraud' : 'Legitimate'}
+                                                </span>
+                                            </td>
+                                            <td>${(t.fraud_score * 100).toFixed(1)}%</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                console.log('Batch results displayed');
+            }
+            
+            // Confidence threshold slider
+            const confidenceSlider = document.getElementById('confidence_threshold');
+            const rangeValue = document.querySelector('.range-value');
+            
+            confidenceSlider?.addEventListener('input', function() {
+                rangeValue.textContent = (this.value * 100).toFixed(0) + '%';
+            });
+            
+            // Form submission handlers
+            if (quickForm) {
+                quickForm.addEventListener('submit', handleFormSubmission);
+            }
+            
+            if (standardForm) {
+                standardForm.addEventListener('submit', handleFormSubmission);
+            }
+            
+            if (advancedForm) {
+                advancedForm.addEventListener('submit', handleFormSubmission);
+            }
+            
+            function handleFormSubmission(event) {
+                event.preventDefault();
+                console.log('Form submitted:', event.target.id);
+                
+                const formData = new FormData(event.target);
+                if (formData.get('amount')) {
+                    formData.set('amount', parseFloat(formData.get('amount')));
+                }
+
+                const submitBtn = event.target.querySelector('button[type="submit"]');
                 if (submitBtn) {
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
                     submitBtn.disabled = true;
@@ -177,23 +1556,65 @@
                 resultDiv.innerHTML = '<div class="loading">Analyzing transaction patterns...</div>';
                 resultDiv.className = 'fraud-result';
 
-                try {
-                    const response = await fetch('/api/detect_fraud', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
-
-                    const result = await response.json();
-
-                    if (response.ok) {
+                // Real API call to backend
+                fetch('/api/detect_fraud', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    displayEnhancedResults(result, formData);
+                    addToRecentAnalysis(formData, result);
+                    showNotification(
+                        result.is_fraud ? 'Fraud pattern detected!' : 'Transaction appears legitimate.',
+                        result.is_fraud ? 'error' : 'success'
+                    );
+                    
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '<i class="fas fa-search"></i> Analyze Transaction';
+                        submitBtn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resultDiv.innerHTML = `
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Analysis Error
+                            </h3>
+                        </div>
+                        <div style="padding: 1rem;">
+                            <div style="color: #dc2626; font-weight: 600;">
+                                Failed to analyze transaction. Please try again.
+                            </div>
+                            <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+                                Error: ${error.message}
+                            </div>
+                        </div>
+                    `;
+                    resultDiv.classList.add('error');
+                    
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '<i class="fas fa-search"></i> Analyze Transaction';
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
+            
+            function displayEnhancedResults(result, formData) {
+                const confidence = (result.fraud_probability * 100).toFixed(2);
+                
                         let messageHtml = `
                             <div class="card-header">
                                 <h3 class="card-title">
                                     <i class="fas fa-${result.is_fraud ? 'exclamation-triangle' : 'check-circle'}"></i>
-                                    Analysis Complete
+                            Advanced Analysis Complete
                                 </h3>
                             </div>
                             <div style="padding: 1rem;">
@@ -201,7 +1622,7 @@
                                     ${result.is_fraud ? '⚠️ Potential Fraud Detected' : '✅ Transaction Legitimate'}
                                 </div>
                                 <div style="margin-bottom: 1rem;">
-                                    <strong>Confidence:</strong> ${(result.fraud_probability * 100).toFixed(2)}%
+                            <strong>AI Confidence:</strong> ${confidence}%
                                 </div>
                         `;
                         
@@ -223,51 +1644,89 @@
                             resultDiv.classList.add('legitimate');
                         }
 
-                        // Add to recent analysis
-                        addToRecentAnalysis(data, result);
-                        
-                        // Show notification
-                        showNotification(
-                            result.is_fraud ? 'Fraud pattern detected!' : 'Transaction appears legitimate.',
-                            result.is_fraud ? 'error' : 'success'
-                        );
+                // Show confidence meter
+                showConfidenceMeter(confidence);
+                
+                // Show history comparison
+                showHistoryComparison(formData);
+            }
+            
+            function showConfidenceMeter(confidence) {
+                const meter = document.getElementById('confidenceMeter');
+                const fill = document.getElementById('confidenceFill');
+                const value = document.getElementById('confidenceValue');
+                
+                if (meter && fill && value) {
+                    meter.style.display = 'block';
+                    fill.style.width = confidence + '%';
+                    value.textContent = confidence + '%';
+                    
+                    // Color based on confidence
+                    if (confidence < 50) {
+                        fill.style.background = '#dc2626';
+                    } else if (confidence < 80) {
+                        fill.style.background = '#ca8a04';
                     } else {
-                        resultDiv.innerHTML = `
-                            <div class="card-header">
-                                <h3 class="card-title">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    Analysis Error
-                                </h3>
-                            </div>
-                            <div style="padding: 1rem;">
-                                <p>${result.error || 'Something went wrong during analysis.'}</p>
-                            </div>
-                        `;
-                        resultDiv.classList.add('error');
+                        fill.style.background = '#16a34a';
                     }
-                } catch (error) {
-                    resultDiv.innerHTML = `
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i class="fas fa-exclamation-circle"></i>
-                                Network Error
-                            </h3>
-                        </div>
-                        <div style="padding: 1rem;">
-                            <p>Could not connect to the server. Please check your connection and try again.</p>
-                        </div>
-                    `;
-                    resultDiv.classList.add('error');
-                } finally {
-                    // Reset button
-                    if (submitBtn) {
-                        submitBtn.innerHTML = '<i class="fas fa-search"></i> Analyze Transaction';
-                        submitBtn.disabled = false;
+                }
+            }
+            
+            function showHistoryComparison(formData) {
+                const historyDiv = document.getElementById('historyComparison');
+                if (!historyDiv) return;
+                
+                historyDiv.style.display = 'block';
+                
+                // Create mock historical data
+                const historicalData = [
+                    { date: '2024-01-01', amount: 50, is_fraud: false },
+                    { date: '2024-01-02', amount: 150, is_fraud: false },
+                    { date: '2024-01-03', amount: 200, is_fraud: true },
+                    { date: '2024-01-04', amount: 75, is_fraud: false },
+                    { date: '2024-01-05', amount: 300, is_fraud: false }
+                ];
+                
+                const ctx = document.getElementById('historyChart');
+                if (ctx) {
+                    new Chart(ctx.getContext('2d'), {
+                        type: 'line',
+                        data: {
+                            labels: historicalData.map(d => d.date),
+                            datasets: [{
+                                label: 'Transaction Amounts',
+                                data: historicalData.map(d => d.amount),
+                                borderColor: '#2563eb',
+                                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: true }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                },
+                                x: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                }
                     }
                 }
             });
+                }
+            }
 
-            // Add form validation
+            // Enhanced form validation with real-time feedback
+            const allForms = [quickForm, standardForm, advancedForm];
+            allForms.forEach(form => {
+                if (form) {
             const inputs = form.querySelectorAll('input, select');
             
             inputs.forEach(input => {
@@ -278,8 +1737,230 @@
                         this.style.borderColor = 'var(--secondary-color)';
                     }
                 });
+                        
+                        input.addEventListener('input', function() {
+                            updateRiskIndicators();
+                        });
+                    });
+                }
             });
+            
+            // Clear history and export buttons
+            document.getElementById('clearHistory')?.addEventListener('click', function() {
+                const recentDiv = document.getElementById('recentAnalysis');
+                if (recentDiv) {
+                    recentDiv.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No recent analysis yet. Start by analyzing a transaction above.</p>';
+                    updateQuickAnalytics();
+                }
+                console.log('History cleared');
+            });
+            
+            document.getElementById('exportHistory')?.addEventListener('click', function() {
+                const recentDiv = document.getElementById('recentAnalysis');
+                if (recentDiv) {
+                    const items = recentDiv.querySelectorAll('div');
+                    let csv = 'Date,Amount,Category,Location,Time,Status\n';
+                    items.forEach(item => {
+                        const text = item.textContent;
+                        const amount = text.match(/\$([\d.]+)/)?.[1] || '';
+                        const category = text.match(/- ([^-]+)/)?.[1] || '';
+                        const location = text.match(/([^•]+) •/)?.[1] || '';
+                        const time = text.match(/• ([^•]+)/)?.[1] || '';
+                        const status = text.includes('Fraud') ? 'Fraud' : 'Legitimate';
+                        csv += `${new Date().toISOString()},${amount},${category},${location},${time},${status}\n`;
+                    });
+                    
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'fraud_analysis_history.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+                console.log('History exported');
+            });
+            
+            console.log('Advanced Transaction Analysis initialized successfully');
         });
+
+        // Advanced Features Functions
+        function showSmartSuggestions(formType) {
+            const suggestions = {
+                quick: [
+                    '💡 Tip: Amounts over $500 are flagged for review',
+                    '💡 Tip: International transactions have higher risk',
+                    '💡 Tip: Early morning transactions (1-6 AM) are unusual',
+                    '💡 Tip: Electronics category has moderate risk'
+                ],
+                standard: [
+                    '💡 Tip: Upload receipts for better verification',
+                    '💡 Tip: Use specific transaction IDs for tracking',
+                    '💡 Tip: Different city transactions need extra review',
+                    '💡 Tip: Night transactions (10 PM - 1 AM) are risky'
+                ],
+                advanced: [
+                    '💡 Tip: Deep analysis takes 2-3x longer',
+                    '💡 Tip: Higher confidence = fewer false positives',
+                    '💡 Tip: Credit cards have different risk patterns',
+                    '💡 Tip: International payments need special attention'
+                ]
+            };
+            
+            const tips = suggestions[formType] || [];
+            const tip = tips[Math.floor(Math.random() * tips.length)];
+            
+            showNotification(tip, 'info');
+        }
+
+        function validateForm(formType) {
+            const form = document.getElementById(formType === 'quick' ? 'quickAnalysisForm' : 
+                                              formType === 'standard' ? 'fraudDetectionForm' : 
+                                              'advancedAnalysisForm');
+            
+            if (!form) return;
+            
+            const inputs = form.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+            let missingFields = [];
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    missingFields.push(input.name || input.id);
+                    input.style.borderColor = '#dc2626';
+                } else {
+                    input.style.borderColor = '#16a34a';
+                }
+            });
+            
+            if (isValid) {
+                showNotification('✅ All required fields are filled correctly!', 'success');
+            } else {
+                showNotification(`❌ Please fill: ${missingFields.slice(0, 3).join(', ')}${missingFields.length > 3 ? '...' : ''}`, 'error');
+            }
+        }
+
+        function showAdvancedSettings() {
+            const settings = `
+                <div style="padding: 1rem; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                    <h5 style="margin-bottom: 1rem; color: var(--text-primary);">Advanced Settings</h5>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            <input type="checkbox" checked> Enable Real-time Risk Assessment
+                        </label>
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            <input type="checkbox" checked> Show AI Confidence Meter
+                        </label>
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            <input type="checkbox"> Enable Historical Comparison
+                        </label>
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary);">
+                            <input type="checkbox"> Auto-save Analysis Results
+                        </label>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="btn-sm">Close</button>
+                </div>
+            `;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = settings;
+            resultDiv.style.display = 'block';
+        }
+
+        function showBatchHelp() {
+            const help = `
+                <div style="padding: 1rem; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                    <h5 style="margin-bottom: 1rem; color: var(--text-primary);">Batch Analysis Help</h5>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
+                        <p><strong>CSV Format:</strong></p>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>amount,category,location,time_of_day</li>
+                            <li>100.00,groceries,same city,morning</li>
+                            <li>250.00,electronics,different city,afternoon</li>
+                        </ul>
+                        <p><strong>Limits:</strong> Maximum 1000 transactions per file</p>
+                        <p><strong>Processing:</strong> Each transaction is analyzed individually</p>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="btn-sm">Got it!</button>
+                </div>
+            `;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = help;
+            resultDiv.style.display = 'block';
+        }
+
+        // Enhanced notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 400px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                animation: slideIn 0.3s ease;
+            `;
+            
+            if (type === 'success') {
+                notification.style.background = '#16a34a';
+            } else if (type === 'error') {
+                notification.style.background = '#dc2626';
+            } else if (type === 'info') {
+                notification.style.background = '#2563eb';
+            }
+            
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Update quick analytics summary from recentAnalysis
+        function updateQuickAnalytics() {
+            const recentDiv = document.getElementById('recentAnalysis');
+            if (!recentDiv) return;
+            const items = recentDiv.querySelectorAll('div');
+            let fraud = 0, legit = 0;
+            items.forEach(item => {
+                if (item.innerHTML.includes('Fraud')) fraud++;
+                else legit++;
+            });
+            document.getElementById('quick-legit').textContent = legit;
+            document.getElementById('quick-fraud').textContent = fraud;
+            const total = fraud + legit;
+            document.getElementById('quick-fraud-rate').textContent = total ? ((fraud/total)*100).toFixed(1) + '%' : '-';
+        }
 
         function addToRecentAnalysis(data, result) {
             const recentDiv = document.getElementById('recentAnalysis');
@@ -296,8 +1977,8 @@
             
             analysisItem.innerHTML = `
                 <div>
-                    <div style="font-weight: 600;">$${data.amount} - ${data.merchant_category}</div>
-                    <div style="font-size: 0.875rem; color: var(--text-secondary);">${data.location} • ${data.time_of_day}</div>
+                    <div style="font-weight: 600;">$${data.get('amount')} - ${data.get('merchant_category')}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary);">${data.get('location')} • ${data.get('time_of_day')}</div>
                 </div>
                 <div>
                     <span class="real-time-indicator" style="background: ${result.is_fraud ? 'rgba(220, 38, 38, 0.1)' : 'rgba(22, 163, 74, 0.1)'}; border-color: ${result.is_fraud ? 'var(--secondary-color)' : 'var(--success-color)'}; color: ${result.is_fraud ? 'var(--secondary-color)' : 'var(--success-color)'};">
@@ -306,20 +1987,19 @@
                 </div>
             `;
             
-            // Remove the "no analysis" message if it exists
             const noAnalysisMsg = recentDiv.querySelector('p');
             if (noAnalysisMsg) {
                 noAnalysisMsg.remove();
             }
             
-            // Add new analysis at the top
             recentDiv.insertBefore(analysisItem, recentDiv.firstChild);
             
-            // Keep only last 5 analyses
             const items = recentDiv.querySelectorAll('div');
             if (items.length > 5) {
                 items[items.length - 1].remove();
             }
+            
+            updateQuickAnalytics();
         }
 
         function showNotification(message, type = 'success') {

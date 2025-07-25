@@ -3,138 +3,706 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FraudGuard - Transactions</title>
+    <title>FraudGuard - Transaction Management</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='shield.png') }}">
-    <style>
-        .pagination { display: flex; justify-content: center; margin: 2rem 0 0 0; gap: 0.5rem; }
-        .pagination-btn { background: var(--background-card); color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; font-weight: 600; transition: background 0.2s; }
-        .pagination-btn.active, .pagination-btn:hover { background: var(--primary-color); color: #fff; }
-        .styled-table th, .styled-table td {
-            text-align: center;
-            vertical-align: middle;
-            padding: 0.75rem 0.5rem;
-            white-space: nowrap;
-        }
-        .styled-table th {
-            font-weight: 700;
-            font-size: 1.05rem;
-        }
-        .styled-table td {
-            font-size: 1rem;
-        }
-        .styled-table .fraud-result {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 110px;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        .styled-table .fraud {
-            background: rgba(220,38,38,0.1);
-            color: #dc2626;
-            border: 2px solid #dc2626;
-        }
-        .styled-table .legitimate {
-            background: rgba(22,163,74,0.1);
-            color: #16a34a;
-            border: 2px solid #16a34a;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-{% if session.get('user_id') %}
     {% include 'navbar_logged_in.html' %}
-{% else %}
-    {% include 'navbar_public.html' %}
-{% endif %}
-    <div class="main-container">
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title"><i class="fas fa-list"></i> Your Transactions</h2>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-list"></i> Transaction Management</h1>
+            <p>View and manage all your analyzed transactions</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-list"></i></div>
+                <div class="stat-content">
+                    <h3>{{ transactions|length }}</h3>
+                    <p>Total Transactions</p>
+                </div>
             </div>
-            {% if transactions and transactions|length > 0 %}
-            <div style="overflow-x:auto;">
-                <table class="styled-table" id="transactions-table" style="width:100%; border-collapse:collapse;">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Category</th>
-                            <th>Location</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactions-tbody">
-                        <!-- Rows will be rendered by JS for pagination -->
-                    </tbody>
-                </table>
+            <div class="stat-card">
+                <div class="stat-icon fraud"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-content">
+                    <h3>{{ transactions|selectattr('is_fraud', 'equalto', True)|list|length }}</h3>
+                    <p>Fraudulent</p>
+                </div>
             </div>
-            <div class="pagination" id="pagination"></div>
-            <script>
-                const transactions = [
+            <div class="stat-card">
+                <div class="stat-icon legitimate"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-content">
+                    <h3>{{ transactions|selectattr('is_fraud', 'equalto', False)|list|length }}</h3>
+                    <p>Legitimate</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>
+                        {% set fraud_count = transactions|selectattr('is_fraud', 'equalto', True)|list|length %}
+                        {% set total_count = transactions|length %}
+                        {% if total_count > 0 %}
+                            {{ "%.1f"|format((fraud_count / total_count) * 100) }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </h3>
+                    <p>Fraud Rate</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="filters-section">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search transactions...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="filter-controls">
+                <select id="status-filter">
+                    <option value="">All Status</option>
+                    <option value="fraud">Fraudulent</option>
+                    <option value="legitimate">Legitimate</option>
+                </select>
+                <select id="category-filter">
+                    <option value="">All Categories</option>
+                    <option value="groceries">Groceries</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="food & dining">Food & Dining</option>
+                    <option value="travel">Travel</option>
+                    <option value="online shopping">Online Shopping</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="table-container">
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Transaction ID</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Location</th>
+                        <th>Time</th>
+                        <th>Merchant</th>
+                        <th>Receipt</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-tbody">
                     {% for tx in transactions %}
-                    {
-                        date: "{{ tx.date if tx.date is defined else (tx.timestamp.strftime('%Y-%m-%d %H:%M') if tx.timestamp is defined else 'N/A') }}",
-                        amount: {{ tx.transaction_data.amount if tx.transaction_data.amount is defined else 'null' }},
-                        category: "{{ tx.transaction_data.category or 'N/A' }}",
-                        location: "{{ tx.transaction_data.location or 'N/A' }}",
-                        is_fraud: {{ 'true' if tx.is_fraud else 'false' }}
-                    },
+                    <tr class="transaction-row" data-status="{{ 'fraud' if tx.is_fraud else 'legitimate' }}" data-category="{{ tx.transaction_data.merchant_category if tx.transaction_data else 'other' }}">
+                        <td>{{ tx.timestamp.strftime('%Y-%m-%d %H:%M') if tx.timestamp else 'N/A' }}</td>
+                        <td>{{ tx.transaction_id or 'N/A' }}</td>
+                        <td>${{ "%.2f"|format(tx.transaction_data.amount) if tx.transaction_data and tx.transaction_data.amount else '0.00' }}</td>
+                        <td>{{ tx.transaction_data.merchant_category if tx.transaction_data else 'N/A' }}</td>
+                        <td>{{ tx.transaction_data.location if tx.transaction_data else 'N/A' }}</td>
+                        <td>{{ tx.transaction_data.time_of_day if tx.transaction_data else 'N/A' }}</td>
+                        <td>{{ tx.transaction_data.merchant_name if tx.transaction_data else 'N/A' }}</td>
+                        <td>
+                            {% if tx.image_filename %}
+                                <button class="btn-view-receipt" onclick="showReceipt('{{ tx.image_filename }}')" title="View Receipt">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                            {% else %}
+                                <span class="no-receipt">No Receipt</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="status-badge {{ 'fraud' if tx.is_fraud else 'legitimate' }}">
+                                <i class="fas fa-{{ 'exclamation-triangle' if tx.is_fraud else 'check-circle' }}"></i>
+                                {{ 'Fraud' if tx.is_fraud else 'Legitimate' }}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn-view" onclick="showTransactionDetails('{{ tx._id }}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
                     {% endfor %}
-                ];
-                const rowsPerPage = 10;
-                let currentPage = 1;
-                function renderTable(page) {
-                    const tbody = document.getElementById('transactions-tbody');
-                    tbody.innerHTML = '';
-                    const start = (page - 1) * rowsPerPage;
-                    const end = Math.min(start + rowsPerPage, transactions.length);
-                    for (let i = start; i < end; i++) {
-                        const tx = transactions[i];
-                        tbody.innerHTML += `
-                        <tr>
-                            <td>${i + 1}</td>
-                            <td>${tx.date}</td>
-                            <td>${tx.amount !== null ? '$' + tx.amount.toFixed(2) : 'N/A'}</td>
-                            <td>${tx.category}</td>
-                            <td>${tx.location}</td>
-                            <td>
-                                ${tx.is_fraud ? '<span class="fraud-result fraud"><i class="fas fa-exclamation-triangle"></i> Fraud</span>' : '<span class="fraud-result legitimate"><i class="fas fa-check-circle"></i> Legitimate</span>'}
-                            </td>
-                        </tr>
-                        `;
-                    }
-                }
-                function renderPagination() {
-                    const pagination = document.getElementById('pagination');
-                    pagination.innerHTML = '';
-                    const pageCount = Math.ceil(transactions.length / rowsPerPage);
-                    for (let i = 1; i <= pageCount; i++) {
-                        pagination.innerHTML += `<button class="pagination-btn${i === currentPage ? ' active' : ''}" onclick="goToPage(${i})">${i}</button>`;
-                    }
-                }
-                function goToPage(page) {
-                    currentPage = page;
-                    renderTable(page);
-                    renderPagination();
-                }
-                // Initial render
-                renderTable(currentPage);
-                renderPagination();
-            </script>
-            {% else %}
-            <div style="text-align:center; color:var(--text-secondary); padding:2rem;">
-                <i class="fas fa-folder-open" style="font-size:2.5rem; color:var(--primary-color);"></i>
-                <p style="margin-top:1rem; font-size:1.1rem;">No transactions found. Your recent transactions will appear here.</p>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="analytics-section">
+            <h2><i class="fas fa-chart-bar"></i> Transaction Analytics</h2>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Category Distribution</h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Fraud vs Legitimate</h3>
+                    <canvas id="fraudChart"></canvas>
+                </div>
             </div>
-            {% endif %}
         </div>
     </div>
-{% include 'footer.html' %}
+
+    <!-- Transaction Details Modal -->
+    <div id="transaction-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('transaction-modal')">&times;</span>
+            <h2>Transaction Details</h2>
+            <div id="transaction-details">
+                <!-- Details will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Image Modal -->
+    <div id="receipt-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('receipt-modal')">&times;</span>
+            <h2>Transaction Receipt</h2>
+            <div id="receipt-image-container">
+                <!-- Receipt image will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .stat-icon.fraud {
+            background: var(--danger-color);
+        }
+
+        .stat-icon.legitimate {
+            background: var(--success-color);
+        }
+
+        .stat-content h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .stat-content p {
+            margin: 0;
+            color: var(--text-secondary);
+        }
+
+        .filters-section {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-controls select {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: white;
+        }
+
+        .table-container {
+            background: var(--background-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th {
+            background: var(--background-secondary);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transactions-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transaction-row:hover {
+            background: var(--background-hover);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge.fraud {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+        }
+
+        .status-badge.legitimate {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .btn-view {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-view:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-view-receipt {
+            background: var(--info-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-view-receipt:hover {
+            background: var(--info-dark);
+        }
+
+        .analytics-section {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .analytics-section h2 {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-container {
+            background: var(--background-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .chart-container h3 {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            color: #333; /* Ensure text is dark */
+        }
+
+        .modal-content h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #333; /* Dark color for close button */
+        }
+
+        .transaction-details {
+            margin-top: 1rem;
+            color: #333; /* Ensure text is dark */
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            color: #333; /* Ensure text is dark */
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #666; /* Dark gray for labels */
+        }
+
+        .detail-value {
+            color: #333; /* Dark color for values */
+        }
+
+        .detail-value.fraud {
+            color: #dc3545; /* Red for fraud */
+            font-weight: 600;
+        }
+
+        .detail-value.legitimate {
+            color: #28a745; /* Green for legitimate */
+            font-weight: 600;
+        }
+
+        .receipt-image-container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .receipt-image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .transactions-table {
+                font-size: 0.875rem;
+            }
+            
+            .transactions-table th,
+            .transactions-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+
+    <script>
+        // Transaction data from server
+        const transactions = [
+            {% for tx in transactions %}
+            {
+                id: "{{ tx._id }}",
+                date: "{{ tx.timestamp.strftime('%Y-%m-%d %H:%M') if tx.timestamp else 'N/A' }}",
+                transaction_id: "{{ tx.transaction_id or 'N/A' }}",
+                amount: {{ tx.transaction_data.amount if tx.transaction_data and tx.transaction_data.amount is defined else 0 }},
+                category: "{{ tx.transaction_data.merchant_category if tx.transaction_data and tx.transaction_data.merchant_category else 'N/A' }}",
+                location: "{{ tx.transaction_data.location if tx.transaction_data and tx.transaction_data.location else 'N/A' }}",
+                time_of_day: "{{ tx.transaction_data.time_of_day if tx.transaction_data and tx.transaction_data.time_of_day else 'N/A' }}",
+                merchant_name: "{{ tx.transaction_data.merchant_name if tx.transaction_data and tx.transaction_data.merchant_name else 'N/A' }}",
+                card_type: "{{ tx.transaction_data.card_type if tx.transaction_data and tx.transaction_data.card_type else 'N/A' }}",
+                transaction_type: "{{ tx.transaction_data.transaction_type if tx.transaction_data and tx.transaction_data.transaction_type else 'N/A' }}",
+                currency: "{{ tx.transaction_data.currency if tx.transaction_data and tx.transaction_data.currency else 'USD' }}",
+                status: "{{ tx.transaction_data.status if tx.transaction_data and tx.transaction_data.status else 'Completed' }}",
+                is_fraud: {{ 'true' if tx.is_fraud else 'false' }},
+                fraud_probability: {{ tx.fraud_probability if tx.fraud_probability is defined else 0 }},
+                explanations: {{ tx.explanations|tojson if tx.explanations else '[]' }},
+                image_filename: "{{ tx.image_filename or '' }}"
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        console.log('Loaded transactions:', transactions);
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            renderCharts();
+        });
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('search-input').addEventListener('input', function() {
+                filterTransactions();
+            });
+
+            // Filter functionality
+            document.getElementById('status-filter').addEventListener('change', filterTransactions);
+            document.getElementById('category-filter').addEventListener('change', filterTransactions);
+        }
+
+        function filterTransactions() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('status-filter').value;
+            const categoryFilter = document.getElementById('category-filter').value;
+
+            const rows = document.querySelectorAll('.transaction-row');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const status = row.dataset.status;
+                const category = row.dataset.category;
+
+                const matchesSearch = text.includes(searchTerm);
+                const matchesStatus = !statusFilter || status === statusFilter;
+                const matchesCategory = !categoryFilter || category === categoryFilter;
+
+                if (matchesSearch && matchesStatus && matchesCategory) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function renderCharts() {
+            // Category Distribution Chart
+            const categoryData = {};
+            transactions.forEach(tx => {
+                const category = tx.category;
+                categoryData[category] = (categoryData[category] || 0) + 1;
+            });
+
+            const categoryCtx = document.getElementById('categoryChart');
+            if (categoryCtx) {
+                new Chart(categoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(categoryData),
+                        datasets: [{
+                            data: Object.values(categoryData),
+                            backgroundColor: [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Fraud vs Legitimate Chart
+            const fraudCtx = document.getElementById('fraudChart');
+            if (fraudCtx) {
+                const fraudCount = transactions.filter(tx => tx.is_fraud).length;
+                const legitimateCount = transactions.filter(tx => !tx.is_fraud).length;
+
+                new Chart(fraudCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Legitimate', 'Fraudulent'],
+                        datasets: [{
+                            data: [legitimateCount, fraudCount],
+                            backgroundColor: ['#28a745', '#dc3545']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function showTransactionDetails(transactionId) {
+            const transaction = transactions.find(tx => tx.id === transactionId);
+            if (!transaction) {
+                alert('Transaction not found');
+                return;
+            }
+
+            const detailsHtml = `
+                <div class="transaction-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Transaction ID:</span>
+                        <span class="detail-value">${transaction.transaction_id}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Date:</span>
+                        <span class="detail-value">${transaction.date}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Amount:</span>
+                        <span class="detail-value">$${transaction.amount.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Merchant:</span>
+                        <span class="detail-value">${transaction.merchant_name}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Category:</span>
+                        <span class="detail-value">${transaction.category}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Location:</span>
+                        <span class="detail-value">${transaction.location}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Time of Day:</span>
+                        <span class="detail-value">${transaction.time_of_day}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Card Type:</span>
+                        <span class="detail-value">${transaction.card_type}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Transaction Type:</span>
+                        <span class="detail-value">${transaction.transaction_type}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status:</span>
+                        <span class="detail-value">${transaction.status}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fraud Probability:</span>
+                        <span class="detail-value">${(transaction.fraud_probability * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Result:</span>
+                        <span class="detail-value ${transaction.is_fraud ? 'fraud' : 'legitimate'}">
+                            ${transaction.is_fraud ? 'Fraudulent' : 'Legitimate'}
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Explanations:</span>
+                        <span class="detail-value">
+                            ${transaction.explanations.join(', ')}
+                        </span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('transaction-details').innerHTML = detailsHtml;
+            document.getElementById('transaction-modal').style.display = 'block';
+        }
+
+        function showReceipt(imageFilename) {
+            const receiptImageContainer = document.getElementById('receipt-image-container');
+            receiptImageContainer.innerHTML = ''; // Clear previous image
+
+            if (imageFilename) {
+                const img = document.createElement('img');
+                img.src = `{{ url_for('static', filename='receipts/') }}${imageFilename}`;
+                receiptImageContainer.appendChild(img);
+                document.getElementById('receipt-modal').style.display = 'block';
+            } else {
+                receiptImageContainer.innerHTML = '<p>No receipt available for this transaction.</p>';
+                document.getElementById('receipt-modal').style.display = 'block';
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html> 

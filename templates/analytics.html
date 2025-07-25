@@ -73,6 +73,33 @@
                 </h3>
                 <canvas id="timelineChart" width="400" height="200"></canvas>
             </div>
+            <div class="chart-container">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-barcode"></i>
+                    Fraud Rate by Category
+                </h3>
+                <canvas id="fraudCategoryChart" width="400" height="200"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-chart-area"></i>
+                    Transaction Amount Distribution
+                </h3>
+                <canvas id="amountHistogram" width="400" height="200"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-chart-pie"></i>
+                    Legitimate vs Fraudulent (Pie)
+                </h3>
+                <div style="position: relative; height: 300px; width: 100%;">
+                    <canvas id="legitFraudPie" width="400" height="200" aria-label="Legitimate vs Fraudulent Pie Chart" role="img" style="max-width: 100%; height: auto;"></canvas>
+                    <div id="pie-chart-fallback" style="display: none; text-align: center; padding: 2rem; color: #f8fafc;">
+                        <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>Chart loading...</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Category Breakdown -->
@@ -137,6 +164,34 @@
                 </div>
             </div>
         </div>
+        <div class="card mb-4" style="background: var(--background-card);">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-list"></i>
+                    Analytics Summary
+                </h3>
+            </div>
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="stat-number">${{ "{:,.2f}".format(total_amount) }}</div>
+                    <div class="stat-label">Total Value</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="stat-number">${{ "{:,.2f}".format(fraud_amount) }}</div>
+                    <div class="stat-label">Fraud Amount</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                    <div class="stat-number">{{ "{:.1f}".format((fraud_amount/total_amount)*100) if total_amount > 0 else 0 }}%</div>
+                    <div class="stat-label">Fraud Rate</div>
+                </div>
+                <div class="stat-card">
+                    <a href="/transactions" class="btn btn-secondary" style="margin-top: 1rem;">View Transactions</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Professional Footer -->
@@ -153,131 +208,503 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
     <script>
-    // Category Chart
-    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-    const borderColor = getComputedStyle(document.body).getPropertyValue('--background-card').trim() || '#1e293b';
-
-    const categoryChart = new Chart(categoryCtx, {
-        type: 'doughnut',
-        data: {
-            labels: {{ categories.keys() | tojson | safe }},
-            datasets: [{
-                data: {{ categories.values() | tojson | safe }},
-                backgroundColor: [
-                    '#2563eb', '#dc2626', '#16a34a', '#ca8a04',
-                    '#7c3aed', '#db2777', '#059669', '#ea580c'
-                ],
-                borderWidth: 2,
-                borderColor: borderColor
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        color: '#f8fafc',
-                        padding: 20
-                    }
+    console.log('Starting analytics page initialization...');
+    
+    // Helper function to safely get chart context
+    function getChartContext(canvasId, chartName) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) {
+            console.error(`${chartName} canvas element not found!`);
+            return null;
+        }
+        try {
+            const ctx = canvas.getContext('2d');
+            console.log(`${chartName} context created successfully`);
+            return ctx;
+        } catch (error) {
+            console.error(`Error getting ${chartName} context:`, error);
+            return null;
+        }
+    }
+    
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, initializing charts...');
+        
+        // Category Chart
+        console.log('Creating category chart...');
+        const categoryCtx = getChartContext('categoryChart', 'Category');
+        if (categoryCtx) {
+            try {
+                const borderColor = getComputedStyle(document.body).getPropertyValue('--background-card').trim() || '#1e293b';
+                const categories = {{ categories | tojson | safe }};
+                const categoryLabels = Object.keys(categories);
+                const categoryValues = Object.values(categories);
+                
+                console.log('Category chart data:', { labels: categoryLabels, values: categoryValues });
+                
+                // Ensure we have data
+                if (categoryLabels.length === 0) {
+                    categoryLabels.push('No Data');
+                    categoryValues.push(1);
                 }
+                
+                const categoryChart = new Chart(categoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: categoryLabels,
+                        datasets: [{
+                            data: categoryValues,
+                            backgroundColor: [
+                                '#2563eb', '#dc2626', '#16a34a', '#ca8a04',
+                                '#7c3aed', '#db2777', '#059669', '#ea580c'
+                            ],
+                            borderWidth: 2,
+                            borderColor: borderColor
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#f8fafc',
+                                    padding: 20
+                                }
+                            },
+                            tooltip: {
+                                enabled: true,
+                                backgroundColor: '#1e293b',
+                                titleColor: '#f8fafc',
+                                bodyColor: '#f8fafc'
+                            }
+                        },
+                        onClick: function(evt, elements) {
+                            if (elements.length > 0) {
+                                const idx = elements[0].index;
+                                const label = categoryLabels[idx];
+                                const filtered = window.timelineData.filter(t => t.category === label);
+                                renderDrilldownTable(filtered, label);
+                            }
+                        }
+                    }
+                });
+                console.log('Category chart created successfully!');
+                window.categoryChart = categoryChart;
+            } catch (error) {
+                console.error('Error creating category chart:', error);
             }
         }
-    });
 
         // Timeline Chart
-        const timelineCtx = document.getElementById('timelineChart').getContext('2d');
-        const timelineChart = new Chart(timelineCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Transactions',
-                    data: [65, 59, 80, 81, 56, 55],
-                    borderColor: '#2563eb',
-                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }, {
-                    label: 'Fraud Alerts',
-                    data: [28, 48, 40, 19, 86, 27],
-                    borderColor: '#dc2626',
-                    backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#f8fafc'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#cbd5e1'
+        console.log('Creating timeline chart...');
+        const timelineCtx = getChartContext('timelineChart', 'Timeline');
+        if (timelineCtx) {
+            try {
+                const timelineData = {{ timeline_data | tojson | safe }};
+                console.log('Timeline data received:', timelineData.length, 'transactions');
+                
+                // Ensure we have data
+                if (!timelineData || timelineData.length === 0) {
+                    console.log('No timeline data, creating sample chart...');
+                    const timelineChart = new Chart(timelineCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            datasets: [
+                                {
+                                    label: 'Total Transactions',
+                                    data: [12, 19, 15, 25, 22, 30],
+                                    borderColor: '#2563eb',
+                                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                },
+                                {
+                                    label: 'Fraud Alerts',
+                                    data: [2, 3, 1, 4, 2, 5],
+                                    borderColor: '#dc2626',
+                                    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }
+                            ]
                         },
-                        grid: {
-                            color: '#334155'
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: { color: '#f8fafc' }
+                                },
+                                tooltip: { enabled: true }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                },
+                                y: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                }
+                            }
                         }
-                    },
-                    y: {
-                        ticks: {
-                            color: '#cbd5e1'
+                    });
+                    window.timelineChart = timelineChart;
+                } else {
+                    const timelineLabels = [...new Set(timelineData.map(t => t.timestamp))];
+                    const totalCounts = timelineLabels.map(label => timelineData.filter(t => t.timestamp === label).length);
+                    const fraudCounts = timelineLabels.map(label => timelineData.filter(t => t.timestamp === label && t.is_fraud).length);
+                    
+                    console.log('Timeline chart data:', { labels: timelineLabels, total: totalCounts, fraud: fraudCounts });
+                    
+                    const timelineChart = new Chart(timelineCtx, {
+                        type: 'line',
+                        data: {
+                            labels: timelineLabels,
+                            datasets: [
+                                {
+                                    label: 'Total Transactions',
+                                    data: totalCounts,
+                                    borderColor: '#2563eb',
+                                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                },
+                                {
+                                    label: 'Fraud Alerts',
+                                    data: fraudCounts,
+                                    borderColor: '#dc2626',
+                                    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }
+                            ]
                         },
-                        grid: {
-                            color: '#334155'
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: { color: '#f8fafc' }
+                                },
+                                tooltip: { enabled: true }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                },
+                                y: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                }
+                            }
                         }
-                    }
+                    });
+                    console.log('Timeline chart created successfully!');
+                    window.timelineChart = timelineChart;
                 }
+            } catch (error) {
+                console.error('Error creating timeline chart:', error);
             }
-        });
-
-        // Real-time updates
-        setInterval(() => {
-            // Update timeline chart with new data
-            const newData = timelineChart.data.datasets[0].data.map(() => 
-                Math.floor(Math.random() * 100)
-            );
-            timelineChart.data.datasets[0].data = newData;
-            timelineChart.update('none');
-        }, 10000);
-
-        // Add notification system
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-                ${message}
-            `;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
         }
 
-        // Simulate real-time analytics updates
-        setInterval(() => {
-            const messages = [
-                'New data points added',
-                'Analytics updated',
-                'Chart refreshed',
-                'Risk assessment completed'
-            ];
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-            if (Math.random() > 0.7) { // 30% chance
-                showNotification(randomMessage, 'success');
+        // Fraud Rate by Category Bar Chart
+        console.log('Creating fraud category chart...');
+        const fraudCategoryCtx = getChartContext('fraudCategoryChart', 'Fraud Category');
+        if (fraudCategoryCtx) {
+            try {
+                const fraudByCategory = {{ fraud_by_category | tojson | safe }};
+                const fraudCategoryLabels = Object.keys(fraudByCategory);
+                const fraudCategoryCounts = Object.values(fraudByCategory);
+                
+                console.log('Fraud category data:', { labels: fraudCategoryLabels, counts: fraudCategoryCounts });
+                
+                // Ensure we have data
+                if (fraudCategoryLabels.length === 0) {
+                    console.log('No fraud category data, creating sample chart...');
+                    const fraudCategoryChart = new Chart(fraudCategoryCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Electronics', 'Online Shopping', 'Travel', 'Groceries'],
+                            datasets: [{
+                                label: 'Fraudulent Transactions',
+                                data: [3, 5, 2, 1],
+                                backgroundColor: '#dc2626',
+                                borderColor: '#b91c1c',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: true }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                },
+                                y: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                }
+                            }
+                        }
+                    });
+                    window.fraudCategoryChart = fraudCategoryChart;
+                } else {
+                    const fraudCategoryChart = new Chart(fraudCategoryCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: fraudCategoryLabels,
+                            datasets: [{
+                                label: 'Fraudulent Transactions',
+                                data: fraudCategoryCounts,
+                                backgroundColor: '#dc2626',
+                                borderColor: '#b91c1c',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: true }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                },
+                                y: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                }
+                            }
+                        }
+                    });
+                    console.log('Fraud category chart created successfully!');
+                    window.fraudCategoryChart = fraudCategoryChart;
+                }
+            } catch (error) {
+                console.error('Error creating fraud category chart:', error);
             }
-        }, 12000);
+        }
+
+        // Transaction Amount Histogram
+        console.log('Creating amount histogram...');
+        const amountHistogramCtx = getChartContext('amountHistogram', 'Amount Histogram');
+        if (amountHistogramCtx) {
+            try {
+                const timelineData = {{ timeline_data | tojson | safe }};
+                const allAmounts = timelineData.map(t => parseFloat(t.amount) || 0).filter(a => !isNaN(a));
+                
+                console.log('Amount histogram data:', { amounts: allAmounts.length, min: Math.min(...allAmounts), max: Math.max(...allAmounts) });
+                
+                function getHistogramBins(data, binCount = 10) {
+                    if (!data.length) return { bins: ['$0'], counts: [0] };
+                    const min = Math.min(...data);
+                    const max = Math.max(...data);
+                    const binSize = (max - min) / binCount;
+                    const bins = Array.from({length: binCount}, (_, i) => min + i * binSize);
+                    const counts = Array(binCount).fill(0);
+                    data.forEach(val => {
+                        let idx = Math.floor((val - min) / binSize);
+                        if (idx === binCount) idx--;
+                        counts[idx]++;
+                    });
+                    return { bins, counts };
+                }
+                
+                // Ensure we have data
+                if (allAmounts.length === 0) {
+                    console.log('No amount data, creating sample histogram...');
+                    const amountHistogram = new Chart(amountHistogramCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['$0-50', '$50-100', '$100-150', '$150-200', '$200+'],
+                            datasets: [{
+                                label: 'Transaction Count',
+                                data: [15, 25, 20, 10, 5],
+                                backgroundColor: '#2563eb',
+                                borderColor: '#1e40af',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: true }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                },
+                                y: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                }
+                            }
+                        }
+                    });
+                    window.amountHistogram = amountHistogram;
+                } else {
+                    const { bins, counts } = getHistogramBins(allAmounts, 10);
+                    
+                    const amountHistogram = new Chart(amountHistogramCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: bins.map(b => '$' + b.toFixed(2)),
+                            datasets: [{
+                                label: 'Transaction Count',
+                                data: counts,
+                                backgroundColor: '#2563eb',
+                                borderColor: '#1e40af',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: true }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                },
+                                y: {
+                                    ticks: { color: '#cbd5e1' },
+                                    grid: { color: '#334155' }
+                                }
+                            }
+                        }
+                    });
+                    console.log('Amount histogram created successfully!');
+                    window.amountHistogram = amountHistogram;
+                }
+            } catch (error) {
+                console.error('Error creating amount histogram:', error);
+            }
+        }
+
+        // Pie chart for Legitimate vs Fraudulent
+        console.log('Creating pie chart...');
+        const legitFraudPieCtx = getChartContext('legitFraudPie', 'Pie Chart');
+        const pieFallback = document.getElementById('pie-chart-fallback');
+        
+        if (!legitFraudPieCtx) {
+            console.error('Pie chart canvas element not found!');
+            if (pieFallback) {
+                pieFallback.style.display = 'block';
+                pieFallback.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: #dc2626;"></i><p>Chart element not found</p>';
+            }
+        } else {
+            try {
+                const timelineData = {{ timeline_data | tojson | safe }};
+                const legitCountPie = timelineData.filter(t => !t.is_fraud).length || 75;
+                const fraudCountPie = timelineData.filter(t => t.is_fraud).length || 25;
+                
+                console.log('Pie chart data:', { legitimate: legitCountPie, fraudulent: fraudCountPie });
+                
+                const legitFraudPie = new Chart(legitFraudPieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Legitimate', 'Fraudulent'],
+                        datasets: [{
+                            data: [legitCountPie, fraudCountPie],
+                            backgroundColor: ['#16a34a', '#dc2626'],
+                            borderWidth: 2,
+                            borderColor: '#1e293b'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { 
+                                position: 'bottom', 
+                                labels: { 
+                                    color: '#f8fafc',
+                                    font: { size: 12 }
+                                } 
+                            },
+                            tooltip: { 
+                                enabled: true,
+                                backgroundColor: '#1e293b',
+                                titleColor: '#f8fafc',
+                                bodyColor: '#f8fafc'
+                            },
+                            title: { 
+                                display: true, 
+                                text: 'Legitimate vs Fraudulent', 
+                                color: '#f8fafc',
+                                font: { size: 16 }
+                            }
+                        },
+                        onClick: function(evt, elements) {
+                            if (elements.length > 0) {
+                                const idx = elements[0].index;
+                                const isFraud = idx === 1;
+                                const filtered = timelineData.filter(t => t.is_fraud === isFraud);
+                                renderDrilldownTable(filtered, isFraud ? 'Fraudulent' : 'Legitimate');
+                            }
+                        }
+                    }
+                });
+                console.log('Pie chart created successfully!');
+                window.legitFraudPie = legitFraudPie;
+                
+                if (pieFallback) {
+                    pieFallback.style.display = 'none';
+                }
+                
+            } catch (error) {
+                console.error('Error creating pie chart:', error);
+                if (pieFallback) {
+                    pieFallback.style.display = 'block';
+                    pieFallback.innerHTML = `<i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: #dc2626;"></i><p>Error loading chart: ${error.message}</p>`;
+                }
+            }
+        }
+        
+        // Global timeline data for filtering
+        window.timelineData = {{ timeline_data | tojson | safe }};
+        
+        console.log('All charts initialization completed!');
+    });
+    
+    // Drilldown table rendering function
+    function renderDrilldownTable(data, label) {
+        let html = '<div class="card"><div class="card-header"><h3 class="card-title">Transactions for ' + label + '</h3></div><div style="overflow-x:auto;"><table class="styled-table"><thead><tr><th>Timestamp</th><th>Amount</th><th>Is Fraud</th><th>Category</th></tr></thead><tbody>';
+        data.forEach(t => {
+            html += `<tr><td>${t.timestamp}</td><td>$${t.amount}</td><td>${t.is_fraud ? 'Fraud' : 'Legitimate'}</td><td>${t.category || ''}</td></tr>`;
+        });
+        html += '</tbody></table></div></div>';
+        const drilldownContainer = document.getElementById('drilldown-table');
+        if (drilldownContainer) {
+            drilldownContainer.innerHTML = html;
+        }
+    }
+    
+    // Add drilldown table container if it doesn't exist
+    if (!document.getElementById('drilldown-table')) {
+        const drillDiv = document.createElement('div');
+        drillDiv.id = 'drilldown-table';
+        document.querySelector('.analytics-container').appendChild(drillDiv);
+    }
     </script>
 </body>
 </html> 

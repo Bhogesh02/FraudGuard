@@ -563,20 +563,20 @@ body {
 .chart-container {
     background: var(--background-card);
     border-radius: 16px;
-    padding: 2rem;
+    padding: 1.5rem;
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-xl);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    min-height: 400px;
+    min-height: 300px;
     display: flex;
     flex-direction: column;
 }
 
 .chart-container canvas {
     flex: 1;
-    max-height: 350px;
+    max-height: 250px;
     width: 100% !important;
     height: auto !important;
 }

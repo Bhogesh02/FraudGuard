@@ -9,3 +9,5 @@ pymongo
 flask-pymongo
 gunicorn
 python-dotenv
+reportlab
+Pillow
